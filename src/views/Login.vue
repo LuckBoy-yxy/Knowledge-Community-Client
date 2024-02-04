@@ -24,7 +24,7 @@
                       name="username"
                       autocomplete="off"
                       placeholder="请输入用户名(邮箱)"
-                      v-model="username"
+                      v-model.trim="username"
                     >
                   </div>
                   <span class="error layui-form-mid">{{ errors[0] }}</span>
@@ -33,7 +33,7 @@
 
               <div class="layui-form-item">
                 <label for="password" class="layui-form-label">密码</label>
-                <ValidationProvider name="密码" rules="required|min:6|max:12" v-slot="{ errors }">
+                <ValidationProvider name="密码" rules="required|min:6|max:16" v-slot="{ errors }">
                   <div class="layui-input-inline">
                     <input
                       id="password"
@@ -42,7 +42,7 @@
                       name="password"
                       autocomplete="off"
                       placeholder="请输入密码"
-                      v-model="password"
+                      v-model.trim="password"
                     >
                   </div>
                   <div class="error layui-form-mid">{{ errors[0] }}</div>
@@ -61,14 +61,14 @@
                         name="code"
                         placeholder="请输入验证码"
                         autocomplete="off"
-                        v-model="code"
+                        v-model.trim="code"
                       >
                     </div>
                     <div>
                       <span class="svg" v-html="svg" @click="_getCaptcha"></span>
                     </div>
                   </div>
-                  <div class="error">{{ errors[0] }}</div>
+                  <span class="error">{{ errors[0] }}</span>
                 </ValidationProvider>
               </div>
 

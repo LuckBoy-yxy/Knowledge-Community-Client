@@ -48,26 +48,51 @@
         <div class="layui-form layui-form-pane">
           <form method="post">
             <div class="layui-form-item">
-              <label for="L_email" class="layui-form-label">邮箱</label>
-              <div class="layui-input-inline">
-                <input type="text" id="L_email" name="email" required lay-verify="required" autocomplete="off" class="layui-input">
-              </div>
+              <label for="email" class="layui-form-label">邮箱</label>
+              <ValidationProvider name="邮箱" rules="required|email" v-slot="{ errors }">
+                <div class="layui-input-inline">
+                  <input
+                    id="email"
+                    class="layui-input"
+                    type="text"
+                    name="email"
+                    placeholder="请输入邮箱"
+                    autocomplete="off"
+                    v-model="email"
+                  >
+                </div>
+                <span class="error">{{ errors[0] }}</span>
+              </ValidationProvider>
             </div>
+
             <div class="layui-form-item">
-              <label for="L_vercode" class="layui-form-label">人类验证</label>
-              <div class="layui-input-inline">
-                <input type="text" id="L_vercode" name="vercode" required lay-verify="required" placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
-              </div>
-              <div class="layui-form-mid">
-                <span style="color: #c00;">123</span>
-              </div>
+              <ValidationProvider name="验证码" rules="required|code:6" v-slot="{ errors }">
+                <div class="layui-row">
+                  <label for="code" class="layui-form-label">验证码</label>
+                  <div class="layui-input-inline">
+                    <input
+                      id="code"
+                      class="layui-input"
+                      type="text"
+                      name="code"
+                      placeholder="请输入验证码"
+                      autocomplete="off"
+                      v-model.trim="code"
+                    >
+                  </div>
+                  <div>
+                    <span class="svg" v-html="svg" @click="_getCaptcha"></span>
+                  </div>
+                </div>
+                <span class="error">{{ errors[0] }}</span>
+              </ValidationProvider>
             </div>
+
             <div class="layui-form-item">
-              <button class="layui-btn" alert="1" lay-filter="*" lay-submit>提交</button>
+              <button class="layui-btn">提交</button>
             </div>
           </form>
         </div>
-
       </div>
     </div>
   </div>
@@ -77,11 +102,66 @@
 </template>
 
 <script>
+import { ValidationProvider, extend } from 'vee-validate'
+import { required, email } from 'vee-validate/dist/rules'
+import zh from 'vee-validate/dist/locale/zh_CN'
+
+import { getCaptcha } from '@/api/forget'
+
+extend('required', {
+  ...required,
+  message: '{_field_}不能为空'
+})
+extend('email', {
+  ...email,
+  message: zh.messages.email
+})
+extend('code', {
+  validate (value, args) {
+    return value.length === +args.length
+  },
+  params: ['length'],
+  message (filed, args) {
+    return `${filed}长度为 ${args.length} 位`
+  }
+})
+
 export default {
-  name: 'ForgetCom'
+  name: 'ForgetCom',
+  data () {
+    return {
+      email: '',
+      code: '',
+      svg: ''
+    }
+  },
+  components: {
+    ValidationProvider
+  },
+  mounted () {
+    this._getCaptcha()
+  },
+  methods: {
+    async _getCaptcha () {
+      const result = await getCaptcha()
+      if (result.code === 200) {
+        this.svg = result.data
+      }
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-
+.error {
+  color: #c00;
+  line-height: 38px;
+}
+.svg {
+  position: relative;
+  top: -15px;
+  &:hover {
+    cursor: pointer;
+  }
+}
 </style>
