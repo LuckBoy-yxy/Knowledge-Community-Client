@@ -89,7 +89,7 @@
             </div>
 
             <div class="layui-form-item">
-              <button class="layui-btn">提交</button>
+              <button class="layui-btn" @click="submit">提交</button>
             </div>
           </form>
         </div>
@@ -106,7 +106,7 @@ import { ValidationProvider, extend } from 'vee-validate'
 import { required, email } from 'vee-validate/dist/rules'
 import zh from 'vee-validate/dist/locale/zh_CN'
 
-import { getCaptcha } from '@/api/forget'
+import { getCaptcha, forget } from '@/api/forget'
 
 extend('required', {
   ...required,
@@ -146,6 +146,16 @@ export default {
       const result = await getCaptcha()
       if (result.code === 200) {
         this.svg = result.data
+      }
+    },
+    async submit () {
+      const res = await forget({
+        username: this.email,
+        code: this.code
+      })
+      if (res.code === 200) {
+        alert('邮件发送成功')
+        console.log(res)
       }
     }
   }
