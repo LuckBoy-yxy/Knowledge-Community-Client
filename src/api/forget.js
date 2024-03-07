@@ -1,16 +1,8 @@
-import axios from 'axios'
+import instance from '@/utils/request'
 import { getCaptcha } from './common'
 
 const forget = async (submitData) => {
-  let result = ''
-  try {
-    result = await axios.post('/forget', submitData)
-    if (result.status === 200) {
-      return result.data
-    }
-  } catch (err) {
-    console.log(err)
-  }
+  return instance.post('/forget', submitData)
 }
 
 export {

@@ -1,15 +1,7 @@
-import axios from 'axios'
+import instance from '@/utils/request'
 
-const getCaptcha = async function () {
-  let result = ''
-  try {
-    result = await axios.get('/getCaptcha')
-    if (result.status === 200) {
-      return result.data
-    }
-  } catch (error) {
-    console.log(error)
-  }
+const getCaptcha = function () {
+  return instance.get('/getCaptcha')
 }
 
 export {
