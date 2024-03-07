@@ -49,7 +49,7 @@
           <form method="post">
             <div class="layui-form-item">
               <label for="email" class="layui-form-label">邮箱</label>
-              <ValidationProvider name="邮箱" rules="required|email" v-slot="{ errors }">
+              <ValidationProvider name="email" rules="required|email" v-slot="{ errors }">
                 <div class="layui-input-inline">
                   <input
                     id="email"
@@ -66,7 +66,7 @@
             </div>
 
             <div class="layui-form-item">
-              <ValidationProvider name="验证码" rules="required|code:6" v-slot="{ errors }">
+              <ValidationProvider name="code" rules="required|code:6" v-slot="{ errors }">
                 <div class="layui-row">
                   <label for="code" class="layui-form-label">验证码</label>
                   <div class="layui-input-inline">
@@ -102,29 +102,9 @@
 </template>
 
 <script>
-import { ValidationProvider, extend } from 'vee-validate'
-import { required, email } from 'vee-validate/dist/rules'
-import zh from 'vee-validate/dist/locale/zh_CN'
+import { ValidationProvider } from 'vee-validate'
 
 import { getCaptcha, forget } from '@/api/forget'
-
-extend('required', {
-  ...required,
-  message: '{_field_}不能为空'
-})
-extend('email', {
-  ...email,
-  message: zh.messages.email
-})
-extend('code', {
-  validate (value, args) {
-    return value.length === +args.length
-  },
-  params: ['length'],
-  message (filed, args) {
-    return `${filed}长度为 ${args.length} 位`
-  }
-})
 
 export default {
   name: 'ForgetCom',

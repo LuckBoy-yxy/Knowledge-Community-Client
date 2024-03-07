@@ -15,7 +15,7 @@
             <form method="post">
               <div class="layui-form-item">
                 <label for="username" class="layui-form-label">用户名</label>
-                <ValidationProvider name="用户名" rules="required|email" v-slot="{ errors }">
+                <ValidationProvider name="username" rules="required|email" v-slot="{ errors }">
                   <div class="layui-input-inline">
                     <input
                       id="username"
@@ -33,7 +33,7 @@
 
               <div class="layui-form-item">
                 <label for="password" class="layui-form-label">密码</label>
-                <ValidationProvider name="密码" rules="required|min:6|max:16" v-slot="{ errors }">
+                <ValidationProvider name="password" rules="required|min:6|max:16" v-slot="{ errors }">
                   <div class="layui-input-inline">
                     <input
                       id="password"
@@ -50,7 +50,7 @@
               </div>
 
               <div class="layui-form-item">
-                <ValidationProvider name="验证码" rules="required|code:6" v-slot="{ errors }">
+                <ValidationProvider name="code" rules="required|code:6" v-slot="{ errors }">
                   <div class="layui-row">
                     <label for="code" class="layui-form-label">验证码</label>
                     <div class="layui-input-inline">
@@ -94,39 +94,9 @@
 </template>
 
 <script>
-import { ValidationProvider, extend } from 'vee-validate'
-import { required, min, max } from 'vee-validate/dist/rules'
-import zh from 'vee-validate/dist/locale/zh_CN'
+import { ValidationProvider } from 'vee-validate'
 
 import { getCaptcha } from '@/api/login'
-
-extend('required', {
-  ...required,
-  message: '{_field_}不能为空'
-})
-extend('email', {
-  validate (value) {
-    return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
-  },
-  message: '请输入正确的邮箱格式'
-})
-extend('min', {
-  ...min,
-  message: zh.messages.min
-})
-extend('max', {
-  ...max,
-  message: zh.messages.max
-})
-extend('code', {
-  validate (value, args) {
-    return value.length === +args.length
-  },
-  params: ['length'],
-  message (filed, args) {
-    return `${filed}长度为 ${args.length} 位`
-  }
-})
 
 export default {
   name: 'LoginCom',

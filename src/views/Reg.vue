@@ -15,7 +15,7 @@
               <form method="post">
                 <div class="layui-form-item">
                   <label for="email" class="layui-form-label">邮箱</label>
-                  <ValidationProvider name="邮箱" rules="required|email" v-slot="{ errors }">
+                  <ValidationProvider name="email" rules="required|email" v-slot="{ errors }">
                     <div class="layui-input-inline">
                       <input
                         id="email"
@@ -34,7 +34,7 @@
 
                 <div class="layui-form-item">
                   <label for="username" class="layui-form-label">昵称</label>
-                  <ValidationProvider name="昵称" rules="required" v-slot="{ errors }">
+                  <ValidationProvider name="name" rules="required" v-slot="{ errors }">
                     <div class="layui-input-inline">
                       <input
                         id="username"
@@ -54,7 +54,7 @@
                   <label for="password" class="layui-form-label">密码</label>
                   <ValidationProvider
                     name="密码"
-                    rules="required|minmax:6,16"
+                    rules="required|min:6|max:16"
                     v-slot="{ errors }"
                     vid="password"
                   >
@@ -96,7 +96,7 @@
                 </div>
 
                 <div class="layui-form-item">
-                  <ValidationProvider name="验证码" rules="required|code:6" v-slot="{ errors }">
+                  <ValidationProvider name="code" rules="required|code:6" v-slot="{ errors }">
                     <div class="layui-row">
                       <label for="code" class="layui-form-label">验证码</label>
                       <div class="layui-input-inline">
@@ -136,44 +136,9 @@
 </template>
 
 <script>
-import { ValidationProvider, extend } from 'vee-validate'
-import { required, email, confirmed } from 'vee-validate/dist/rules'
-import zh from 'vee-validate/dist/locale/zh_CN'
+import { ValidationProvider } from 'vee-validate'
 
 import { getCaptcha } from '@/api/reg'
-
-extend('required', {
-  ...required,
-  message: '{_field_}是不能为空'
-})
-extend('email', {
-  ...email,
-  message: zh.messages.email
-})
-extend('minmax', {
-  validate (value, { 'min, max': minmax }) {
-    const [min, max] = minmax
-    return value.length >= +min && value.length <= +max
-  },
-  params: ['min, max'],
-  message (filed, { 'min, max': minmax }) {
-    const [min, max] = minmax
-    return `${filed}长度为 ${min} 到 ${max} 位之间`
-  }
-})
-extend('confirmed', {
-  ...confirmed,
-  message: () => '两次密码不匹配'
-})
-extend('code', {
-  validate (value, args) {
-    return value.length === +args.length
-  },
-  params: ['length'],
-  message (filed, args) {
-    return `${filed}长度为 ${args.length} 位`
-  }
-})
 
 export default {
   name: 'RegisterCom',
