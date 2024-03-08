@@ -95,6 +95,7 @@
 
 <script>
 import { ValidationProvider } from 'vee-validate'
+import uuid from 'uuid/v4'
 
 import { getCaptcha } from '@/api/login'
 
@@ -112,11 +113,20 @@ export default {
     }
   },
   mounted () {
+    let sid = ''
+    if (localStorage.getItem('sid')) {
+      sid = localStorage.getItem('sid')
+    } else {
+      sid = uuid()
+      localStorage.setItem('sid', sid)
+    }
+    this.$store.commit('setSid', sid)
     this._getCaptcha()
   },
   methods: {
     async _getCaptcha () {
-      const res = await getCaptcha()
+      const sid = this.$store.state.sid
+      const res = await getCaptcha(sid)
       if (res.code === 200) {
         this.svg = res.data
       }

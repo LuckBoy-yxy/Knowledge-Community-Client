@@ -1,6 +1,6 @@
 export default {
   baseURL: {
-    dev: 'http://localhost:8090',
+    dev: 'http://localhost:3000',
     pro: 'http://your.domain.com'
   }
 }
