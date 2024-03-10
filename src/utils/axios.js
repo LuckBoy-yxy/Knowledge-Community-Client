@@ -61,6 +61,7 @@ class HttpRequest {
 
   // 封装 post 请求方法
   post (url, data) {
+    console.log(data)
     const options = {
       method: 'post',
       url,
