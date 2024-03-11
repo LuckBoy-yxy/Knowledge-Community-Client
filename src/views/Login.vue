@@ -120,6 +120,8 @@ export default {
     }
   },
   mounted () {
+    window.vue = this
+
     let sid = ''
     if (localStorage.getItem('sid')) {
       sid = localStorage.getItem('sid')
