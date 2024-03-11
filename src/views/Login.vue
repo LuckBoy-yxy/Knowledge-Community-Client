@@ -16,7 +16,12 @@
                 <form method="post">
                   <div class="layui-form-item">
                     <label for="username" class="layui-form-label">用户名</label>
-                    <ValidationProvider name="username" rules="required|email" v-slot="{ errors }">
+                    <ValidationProvider
+                      ref="usernameField"
+                      name="username"
+                      rules="required|email"
+                      v-slot="{ errors }"
+                    >
                       <div class="layui-input-inline">
                         <input
                           id="username"
@@ -34,7 +39,12 @@
 
                   <div class="layui-form-item">
                     <label for="password" class="layui-form-label">密码</label>
-                    <ValidationProvider name="password" rules="required|min:6|max:16" v-slot="{ errors }">
+                    <ValidationProvider
+                      ref="pwdField"
+                      name="password"
+                      rules="required|min:6|max:16"
+                      v-slot="{ errors }"
+                    >
                       <div class="layui-input-inline">
                         <input
                           id="password"
@@ -51,7 +61,12 @@
                   </div>
 
                   <div class="layui-form-item">
-                    <ValidationProvider name="code" rules="required|code:6" v-slot="{ errors }">
+                    <ValidationProvider
+                      ref="codeField"
+                      name="code"
+                      rules="required|code:6"
+                      v-slot="{ errors }"
+                    >
                       <div class="layui-row">
                         <label for="code" class="layui-form-label">验证码</label>
                         <div class="layui-input-inline">
@@ -86,8 +101,14 @@
 
                   <div class="layui-form-item fly-form-app">
                     <span>或者使用社交账号登入</span>
-                    <a href="/app/qq" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
-                    <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
+                    <a
+                      href="/app/qq"
+                      onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})"
+                      class="iconfont icon-qq" title="QQ登入"></a>
+                    <a
+                      href="/app/weibo/"
+                      onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})"
+                      class="iconfont icon-weibo" title="微博登入"></a>
                   </div>
                 </form>
               </div>
@@ -151,8 +172,27 @@ export default {
         sid: this.$store.state.sid
       }).then(res => {
         if (res.code === 200) {
+          this.username = ''
+          this.password = ''
+          this.code = ''
+          requestAnimationFrame(() => {
+            this.$refs.form.reset()
+          })
           console.log(res)
+        } else {
+          if (res.code === 404) {
+            this.$refs.pwdField.setErrors([res.msg])
+          } else if (res.code === 401) {
+            this.$refs.codeField.setErrors([res.msg])
+          }
         }
+      }).catch(err => {
+        if (err.response?.data?.code === 500) {
+          this.$refs.usernameField.setErrors(['用户名错误'])
+        } else {
+          this.$alert('服务器错误')
+        }
+        console.log(err)
       })
     }
   }

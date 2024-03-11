@@ -2,7 +2,13 @@
   <div v-show="isShow">
     <div class="alert">
       <div class="flex">{{ msg }}</div>
-      <div class="btnCommon success" @click="close">确定</div>
+      <div v-if="type === 'alert'">
+        <div class="btnCommon success" @click="close">确定</div>
+      </div>
+      <div v-else class="button-container">
+        <div class="btnCommon cancel" @click="cancelEvent">取消</div>
+        <div class="btnCommon success" @click="submitEvent">确定</div>
+      </div>
     </div>
 
     <div class="mask" @click="closeMask"></div>
@@ -13,6 +19,10 @@
 export default {
   name: 'AlertCom',
   props: {
+    type: {
+      type: String,
+      default: 'alert'
+    },
     msg: {
       type: String,
       default: ''
@@ -20,6 +30,14 @@ export default {
     isShow: {
       type: Boolean,
       default: false
+    },
+    success: {
+      type: Function,
+      default: () => console.log('点击了确认按钮')
+    },
+    cancel: {
+      type: Function,
+      default: () => console.log('点击了取消按钮')
     }
   },
   methods: {
@@ -28,6 +46,16 @@ export default {
       this.isShow = false
     },
     closeMask () {
+      if (this.type === 'alert') {
+        this.close()
+      }
+    },
+    cancelEvent () {
+      this.cancel()
+      this.close()
+    },
+    submitEvent () {
+      this.success()
       this.close()
     }
   }
@@ -65,11 +93,27 @@ $btn-dark: darken($btn-main, 5%);
     &.success {
       color: #fff;
       background-color: #009688;
+      &:hover {
+        cursor: pointer;
+        background-color: $btn-dark;
+      }
     }
-    &:hover {
-      cursor: pointer;
-      background-color: $btn-dark;
+    &.cancel {
+      color: 333;
+      background-color: #ededed;
+      &:hover {
+        cursor: pointer;
+      }
     }
+  }
+
+  .button-container {
+    display: flex;
+    flex-wrap: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 10px;
+    width: 100%;
   }
 }
 
