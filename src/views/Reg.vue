@@ -219,10 +219,10 @@ export default {
           this.password = ''
           this.password2 = ''
           this.code = ''
-          requestAnimationFrame(() => {
-            this.$refs.form.reset()
-          })
-          this.$router.push('/login')
+          this.$alert('注册成功')
+          setTimeout(() => {
+            this.$router.push('/login')
+          }, 300)
         } else {
           this.$refs.form.setErrors(res.msg)
         }
