@@ -11,9 +11,11 @@
                 <span class="layui-badge-dot" v-if="item.isNew"></span>
               </router-link>
             </li>
-            <li class="layui-hide-xs"><span class="line"></span></li>
-            <li class="layui-hide-xs"><a href="#">我发表的帖</a></li>
-            <li class="layui-hide-xs"><a href="#">我收藏的帖</a></li>
+            <template v-if="token">
+              <li class="layui-hide-xs"><span class="line"></span></li>
+              <li class="layui-hide-xs"><a href="#">我发表的帖</a></li>
+              <li class="layui-hide-xs"><a href="#">我收藏的帖</a></li>
+            </template>
           </ul>
         </div>
         <div class="right layui-hide-xs">
@@ -61,7 +63,8 @@ export default {
           name: '动态',
           isNew: true
         }
-      ]
+      ],
+      token: this.$store.state.token
     }
   }
 }
