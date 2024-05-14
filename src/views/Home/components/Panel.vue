@@ -4,13 +4,13 @@
       <div class="layui-container">
         <div class="left">
           <ul>
-            <li class="layui-hide-xs"><a href="#">首页</a></li>
-            <li><a href="#">提问</a></li>
-            <li><a href="#">分享</a></li>
-            <li><a href="#">讨论</a></li>
-            <li><a href="#">建议</a></li>
-            <li><a href="#">公告</a></li>
-            <li><a href="#">动态</a></li>
+            <li class="layui-hide-xs"><router-link to="/">首页</router-link></li>
+            <li v-for="item in lists" :key="item.path">
+              <router-link :to="item.path" exact-active-class="layui-this">
+                {{ item.name }}
+                <span class="layui-badge-dot" v-if="item.isNew"></span>
+              </router-link>
+            </li>
             <li class="layui-hide-xs"><span class="line"></span></li>
             <li class="layui-hide-xs"><a href="#">我发表的帖</a></li>
             <li class="layui-hide-xs"><a href="#">我收藏的帖</a></li>
@@ -27,7 +27,43 @@
 
 <script>
 export default {
-  name: 'PanelCom'
+  name: 'PanelCom',
+  data () {
+    return {
+      lists: [
+        {
+          path: '/homeIndex/ask',
+          name: '提问',
+          isNew: true
+        },
+        {
+          path: '/homeIndex/share',
+          name: '分享',
+          isNew: true
+        },
+        {
+          path: '/homeIndex/discuss',
+          name: '讨论',
+          isNew: true
+        },
+        {
+          path: '/homeIndex/advise',
+          name: '建议',
+          isNew: true
+        },
+        {
+          path: '/homeIndex/notice',
+          name: '公告',
+          isNew: true
+        },
+        {
+          path: '/homeIndex/logs',
+          name: '动态',
+          isNew: true
+        }
+      ]
+    }
+  }
 }
 </script>
 
@@ -53,6 +89,7 @@ export default {
   .left {
     ul {
       li {
+        position: relative;
         display: inline-block;
         a {
           padding: 0 20px;
@@ -66,6 +103,11 @@ export default {
           height: 20px;
           background: #ccc;
           vertical-align: middle;
+        }
+        .layui-badge-dot {
+          position: absolute;
+          top: 12px;
+          right: 8px;
         }
       }
     }
