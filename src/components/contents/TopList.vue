@@ -11,9 +11,7 @@
         >去签到</a>
       </div>
 
-      <ul class="fly-list">
-        <ListItem />
-      </ul>
+      <ListItem />
     </div>
   </div>
 </template>

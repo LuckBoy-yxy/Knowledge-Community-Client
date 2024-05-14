@@ -34,21 +34,15 @@
         </span>
       </div>
 
-      <ul class="fly-list">
-        <ListItem />
-      </ul>
-
-      <div style="text-align: center">
-        <div class="laypage-main">
-          <a href="jie/index.html" class="laypage-next">更多求解</a>
-        </div>
-      </div>
+      <ListItem :lists="lists" @nextPage="nextPage" />
     </div>
   </div>
 </template>
 
 <script>
 import ListItem from './ListItem'
+
+import { getList } from '@/api/content'
 
 export default {
   name: 'listCom',
@@ -59,8 +53,15 @@ export default {
     return {
       status: '',
       tag: '',
-      sort: 'created'
+      sort: 'created',
+      page: 1,
+      pagseSize: 10,
+      catalog: '',
+      lists: []
     }
+  },
+  created () {
+    // this._getList()
   },
   methods: {
     search (val) {
@@ -87,6 +88,25 @@ export default {
           this.status = ''
           this.tag = ''
       }
+    },
+    _getList () {
+      const options = {
+        page: this.page,
+        pagseSize: this.pagseSize,
+        sort: this.sort,
+        tag: this.tag,
+        catalog: this.catalog,
+        status: this.status,
+        isTop: 0
+      }
+      getList(options).then(res => {
+        console.log(res)
+        // this.lists = res
+      })
+    },
+    nextPage () {
+      this.page++
+      this._getList()
     }
   }
 }
