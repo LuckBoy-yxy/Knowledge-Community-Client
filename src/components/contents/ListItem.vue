@@ -18,7 +18,7 @@
               v-if="item.user.isVip !== '0'"
             >{{ 'VIP' + item.user.isVip }}</i>
           </a>
-          <span>{{ item.created_time }}</span>
+          <span>{{ item.created_time | moment }}</span>
 
           <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻">
             <i class="iconfont icon-kiss"></i> {{ item.fav }}
@@ -37,7 +37,7 @@
             v-for="(tag, index) in item.tags"
             :key="'tag' + index"
             :class="tag.class"
-          >{{ tag }}</span>
+          >{{ tag.name }}</span>
         </div>
       </li>
     </ul>
@@ -55,6 +55,8 @@
 
 <script>
 import _ from 'lodash'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
 
 export default {
   name: 'ListItem',
@@ -67,7 +69,7 @@ export default {
   computed: {
     items () {
       // return this.props.lists
-      _.map(this.props.lists, item => {
+      _.map(this.$props.lists, item => {
         switch (item.catalog) {
           case 'ask':
             item.catalog = '提问'
@@ -92,6 +94,15 @@ export default {
         }
       })
       return this.lists
+    }
+  },
+  filters: {
+    moment (date) {
+      if (moment(date).isBefore(moment().subtract(7, 'days'))) {
+        return moment(date).format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        return moment(date).from(moment())
+      }
     }
   },
   methods: {

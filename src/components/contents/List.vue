@@ -57,7 +57,34 @@ export default {
       page: 1,
       pagseSize: 10,
       catalog: '',
-      lists: []
+      lists: [
+        {
+          user: {
+            name: '大帅',
+            isVip: '7'
+          },
+          title: '大帅加油',
+          content: '',
+          created_time: '2024-05-1 18:27:00',
+          catalog: 'ask',
+          fav: 100,
+          isEnd: 0,
+          reads: 10,
+          answer: 100,
+          status: 0,
+          isTop: 0,
+          tags: [
+            {
+              name: '精华',
+              class: 'layui-bg-red'
+            },
+            {
+              name: '热门',
+              class: 'layui-bg-blue'
+            }
+          ]
+        }
+      ]
     }
   },
   created () {
