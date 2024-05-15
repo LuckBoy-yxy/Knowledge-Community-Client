@@ -34,7 +34,7 @@
         </span>
       </div>
 
-      <ListItem :lists="lists" @nextPage="nextPage" />
+      <ListItem :isEnd="isEnd" :lists="lists" @nextPage="nextPage" />
     </div>
   </div>
 </template>
@@ -84,7 +84,8 @@ export default {
             }
           ]
         }
-      ]
+      ],
+      isEnd: true
     }
   },
   created () {
@@ -117,6 +118,7 @@ export default {
       }
     },
     _getList () {
+      if (this.isEnd) return
       const options = {
         page: this.page,
         pagseSize: this.pagseSize,
@@ -128,7 +130,20 @@ export default {
       }
       getList(options).then(res => {
         console.log(res)
-        // this.lists = res
+        if (res.code === 200) {
+          if (res.data.length < this.pagseSize) {
+            this.isEnd = true
+          }
+          if (this.lists.length === 0) {
+            this.lists = res.data
+          } else {
+            this.lists = this.lists.concat(res.data)
+          }
+        }
+      }).catch(err => {
+        if (err.msg) {
+          this.$alert(err.msg)
+        }
       })
     },
     nextPage () {

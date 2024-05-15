@@ -43,11 +43,14 @@
     </ul>
 
     <div style="text-align: center" v-show="isMore">
-      <div class="laypage-main">
+      <div class="laypage-main" v-if="!isEnd">
         <a
           class="laypage-next"
           @click.prevent="nextPage"
         >更多求解</a>
+      </div>
+      <div class="nomore gray" v-else>
+        没有更多了
       </div>
     </div>
   </div>
@@ -68,6 +71,10 @@ export default {
     isMore: {
       type: Boolean,
       default: true
+    },
+    isEnd: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -118,5 +125,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.nomore {
+  padding: 30px 0;
+  font-size: 16px;
+}
 </style>
