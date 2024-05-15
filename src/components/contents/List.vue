@@ -147,7 +147,7 @@ export default {
       }).catch(err => {
         this.isRepeat = false
         if (err.msg) {
-          this.$alert(err.msg)
+          this.$alert(err.message)
         }
       })
     },
