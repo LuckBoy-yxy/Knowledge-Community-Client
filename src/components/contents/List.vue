@@ -54,7 +54,7 @@ export default {
       status: '',
       tag: '',
       sort: 'created',
-      page: 1,
+      page: 0,
       pagseSize: 10,
       catalog: '',
       lists: [
@@ -85,8 +85,9 @@ export default {
           ]
         }
       ],
-      isEnd: true,
-      isRepeat: false
+      isEnd: false,
+      isRepeat: false,
+      current: ''
     }
   },
   created () {
@@ -94,6 +95,9 @@ export default {
   },
   methods: {
     search (val) {
+      if (val === '' && this.current === '') return
+      if (val === this.current) return
+      this.current = val
       switch (val) {
         case 0:
           this.status = '0'
@@ -116,6 +120,7 @@ export default {
         default:
           this.status = ''
           this.tag = ''
+          this.current = ''
       }
     },
     _getList () {
@@ -146,7 +151,7 @@ export default {
         }
       }).catch(err => {
         this.isRepeat = false
-        if (err.msg) {
+        if (err.message) {
           this.$alert(err.message)
         }
       })
@@ -154,6 +159,15 @@ export default {
     nextPage () {
       this.page++
       this._getList()
+    }
+  },
+  watch: {
+    current (newVal, oldVal) {
+      this.page = 0
+      this.pageSize = 10
+      this.isEnd = false
+      // this.lists = []
+      // this._getList()
     }
   }
 }
