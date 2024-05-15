@@ -85,7 +85,8 @@ export default {
           ]
         }
       ],
-      isEnd: true
+      isEnd: true,
+      isRepeat: false
     }
   },
   created () {
@@ -118,7 +119,9 @@ export default {
       }
     },
     _getList () {
+      if (this.isRepeat) return
       if (this.isEnd) return
+      this.isRepeat = true
       const options = {
         page: this.page,
         pagseSize: this.pagseSize,
@@ -139,8 +142,10 @@ export default {
           } else {
             this.lists = this.lists.concat(res.data)
           }
+          this.isRepeat = false
         }
       }).catch(err => {
+        this.isRepeat = false
         if (err.msg) {
           this.$alert(err.msg)
         }
