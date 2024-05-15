@@ -91,6 +91,10 @@ export default {
     }
   },
   created () {
+    const catalog = this.$route.params.catalog
+    if (typeof catalog !== 'undefined' && catalog !== '') {
+      this.catalog = catalog
+    }
     // this._getList()
   },
   methods: {
@@ -159,15 +163,27 @@ export default {
     nextPage () {
       this.page++
       this._getList()
-    }
-  },
-  watch: {
-    current (newVal, oldVal) {
+    },
+    initList (flag = false) {
+      if (flag) {
+        const catalog = this.$route.params.catalog
+        if (typeof catalog !== 'undefined' && catalog !== '') {
+          this.catalog = catalog
+        }
+      }
       this.page = 0
       this.pageSize = 10
       this.isEnd = false
       // this.lists = []
       // this._getList()
+    }
+  },
+  watch: {
+    current (newVal, oldVal) {
+      this.initList()
+    },
+    '$route' (newVal, oldVal) {
+      this.initList(true)
     }
   }
 }
