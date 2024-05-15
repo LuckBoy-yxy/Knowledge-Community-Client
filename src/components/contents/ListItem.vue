@@ -42,7 +42,7 @@
       </li>
     </ul>
 
-    <div style="text-align: center">
+    <div style="text-align: center" v-show="isMore">
       <div class="laypage-main">
         <a
           class="laypage-next"
@@ -64,6 +64,10 @@ export default {
     lists: {
       type: Array,
       default: () => []
+    },
+    isMore: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
