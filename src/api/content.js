@@ -15,7 +15,7 @@ export const getList = options => {
 * @param {type} links 为获取友情链接, tips 为获取温馨通道
 */
 export const getTipsOrLinks = type => {
-  return request.get('/public/links', {
+  return request.get('/public/tipsOrlinks', {
     params: {
       type
     }

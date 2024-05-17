@@ -3,17 +3,12 @@
     <h3 class="fly-panel-title">温馨通道</h3>
     <div class="fly-panel-main layui-row">
       <ul class="layui-clear imooc-quick">
-        <li class="layui-col-xs6">
-          <a href target="_blank">imooc</a>
-        </li>
-        <li class="layui-col-xs6">
-          <a href target="_blank">imooc</a>
-        </li>
-        <li class="layui-col-xs6">
-          <a href target="_blank">imooc</a>
-        </li>
-        <li class="layui-col-xs6">
-          <a href target="_blank">imooc</a>
+        <li
+          class="layui-col-xs6"
+          v-for="item in tips"
+          :key="item._id"
+        >
+          <a :href="item.link" target="_blank">{{ item.title }}</a>
         </li>
       </ul>
     </div>
@@ -21,8 +16,27 @@
 </template>
 
 <script>
+import { getTipsOrLinks } from '@/api/content'
+
 export default {
-  name: 'TipsCom'
+  name: 'TipsCom',
+  data () {
+    return {
+      tips: []
+    }
+  },
+  created () {
+    this.getTips()
+  },
+  methods: {
+    getTips () {
+      getTipsOrLinks('tips').then(res => {
+        if (res.code === 200) {
+          this.tips = res.data
+        }
+      })
+    }
+  }
 }
 </script>
 

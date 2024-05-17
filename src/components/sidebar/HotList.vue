@@ -2,64 +2,10 @@
   <div>
     <dl class="fly-panel fly-list-one">
       <dt class="fly-panel-title">本周热议</dt>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
+      <dd v-for="(item, index) in lists" :key="index + item.title">
+        <a href="#">{{ item.title }}</a>
         <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
-        </span>
-      </dd>
-      <dd>
-        <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-        <span>
-          <i class="iconfont icon-pinglun1"></i> 16
+          <i class="iconfont icon-pinglun1"></i> {{ item.answer }}
         </span>
       </dd>
 
@@ -72,8 +18,27 @@
 </template>
 
 <script>
+import { getTopWeek } from '@/api/content'
+
 export default {
-  name: 'HotList'
+  name: 'HotList',
+  data () {
+    return {
+      lists: []
+    }
+  },
+  created () {
+    this._getTopWeek()
+  },
+  methods: {
+    _getTopWeek () {
+      getTopWeek().then(res => {
+        if (res.code === 200) {
+          this.lists = res.data
+        }
+      })
+    }
+  }
 }
 </script>
 
