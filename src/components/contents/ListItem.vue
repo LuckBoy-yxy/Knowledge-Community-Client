@@ -3,7 +3,7 @@
     <ul class="fly-list">
       <li v-for="item in items" :key="item.tid">
         <a href="user/home.html" class="fly-avatar">
-          <img src="" alt="贤心" />
+          <img :src="item.uid.pic" alt="大帅" />
         </a>
         <h2>
           <a class="layui-badge">{{ item.catalog }}</a>
@@ -11,14 +11,14 @@
         </h2>
         <div class="fly-list-info">
           <a href="user/home.html" link>
-            <cite>{{ item.user.name }}</cite>
+            <cite>{{ item.uid.name }}</cite>
             <!--<i class="iconfont icon-renzheng" title="认证信息：XXX"></i>-->
             <i
               class="layui-badge fly-badge-vip"
-              v-if="item.user.isVip !== '0'"
-            >{{ 'VIP' + item.user.isVip }}</i>
+              v-if="item.uid.isVip !== '0'"
+            >{{ 'VIP' + item.uid.isVip }}</i>
           </a>
-          <span>{{ item.created_time | moment }}</span>
+          <span>{{ item.created | moment }}</span>
 
           <span class="fly-list-kiss layui-hide-xs" title="悬赏飞吻">
             <i class="iconfont icon-kiss"></i> {{ item.fav }}
