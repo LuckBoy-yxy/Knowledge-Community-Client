@@ -8,6 +8,12 @@ const Home = () => import(/* webpackChunkName: 'home' */ '../views/Home')
 const HomeIndex = () => import(/* webpackChunkName: 'homeIndex' */ '../views/Channels')
 const HomeAsk = () => import(/* webpackChunkName: 'homeAsk' */ '../views/Channels/templateOne.vue')
 const Center = () => import(/* webpackChunkName: 'center' */ '../views/Center')
+const UserCenter = () => import(/* webpackChunkName: 'userCenter' */ '../views/Center/components/Center.vue')
+const Settings = () => import(/* webpackChunkName: 'settings' */ '../views/Center/components/Settings.vue')
+const Posts = () => import(/* webpackChunkName: 'posts' */ '../views/Center/components/Posts.vue')
+const Messages = () => import(/* webpackChunkName: 'messages' */ '../views/Center/components/Message.vue')
+const Others = () => import(/* webpackChunkName: 'others' */ '../views/Center/components/Others.vue')
+const User = () => import(/* webpackChunkName: 'user' */ '../views/User/index.vue')
 
 Vue.use(VueRouter)
 
@@ -36,7 +42,6 @@ const routes = [
   },
   {
     path: '/',
-    name: 'home',
     component: Home,
     children: [
       {
@@ -56,8 +61,38 @@ const routes = [
     name: 'center',
     component: Center,
     children: [
-
+      {
+        path: '',
+        name: 'user-center',
+        component: UserCenter
+      },
+      {
+        path: '/settings',
+        name: 'settings',
+        component: Settings
+      },
+      {
+        path: '/posts',
+        name: 'posts',
+        component: Posts
+      },
+      {
+        path: '/messages',
+        name: 'messages',
+        component: Messages
+      },
+      {
+        path: '/others',
+        name: 'others',
+        component: Others
+      }
     ]
+  },
+  {
+    path: '/user/:uid',
+    name: 'home',
+    props: true,
+    component: User
   }
 ]
 
