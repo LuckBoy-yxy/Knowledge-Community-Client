@@ -7,6 +7,7 @@ const Forget = () => import(/* webpackChunkName: 'forget' */ '../views/Forget.vu
 const Home = () => import(/* webpackChunkName: 'home' */ '../views/Home')
 const HomeIndex = () => import(/* webpackChunkName: 'homeIndex' */ '../views/Channels')
 const HomeAsk = () => import(/* webpackChunkName: 'homeAsk' */ '../views/Channels/templateOne.vue')
+const Center = () => import(/* webpackChunkName: 'center' */ '../views/Center')
 
 Vue.use(VueRouter)
 
@@ -48,6 +49,14 @@ const routes = [
         component: HomeAsk,
         name: 'homeAsk'
       }
+    ]
+  },
+  {
+    path: '/center',
+    name: 'center',
+    component: Center,
+    children: [
+
     ]
   }
 ]
