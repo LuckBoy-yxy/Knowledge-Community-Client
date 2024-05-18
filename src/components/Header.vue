@@ -36,16 +36,28 @@
         </template>
 
         <template v-else>
-          <li class="layui-nav-item">
-            <a class="fly-nav-avatar" href="javascript:;">
+          <li
+            class="layui-nav-item"
+            @mouseenter="show"
+            @mouseleave="hide"
+          >
+            <a
+              class="fly-nav-avatar"
+              href="javascript:;"
+            >
               <cite class="layui-hide-xs">{{ userInfo.name }} </cite>
-              <i class="iconfont icon-renzheng layui-hide-xs" title="袁大帅"></i>
+              <i class="iconfont icon-renzheng layui-hide-xs" :title="userInfo.name"></i>
               <i
                 class="layui-badge fly-badge-vip layui-hide-xs"
                 v-show="userInfo.isVip !== '0'">VIP{{ userInfo.isVip }}</i>
               <img :src="userInfo.pic">
             </a>
-            <dl class="layui-nav-child">
+
+            <!-- 下拉菜单 -->
+            <dl
+              class="layui-nav-child layui-anim layui-anim-upbit"
+              :class="{ 'layui-show': isShow }"
+            >
               <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
               <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
               <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
@@ -60,11 +72,32 @@
 </template>
 
 <script>
+let timeId = null
+
 export default {
   name: 'HeaderCom',
+  data () {
+    return {
+      isShow: false
+    }
+  },
   computed: {
     userInfo () {
       return this.$store.state.userInfo
+    }
+  },
+  methods: {
+    show () {
+      clearTimeout(timeId)
+      timeId = setTimeout(() => {
+        this.isShow = true
+      }, 200)
+    },
+    hide () {
+      clearTimeout(timeId)
+      timeId = setTimeout(() => {
+        this.isShow = false
+      }, 500)
     }
   }
 }
