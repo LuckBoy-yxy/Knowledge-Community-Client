@@ -11,7 +11,7 @@
                 <span class="layui-badge-dot" v-if="item.isNew"></span>
               </router-link>
             </li>
-            <template v-if="token">
+            <template v-if="userInfo.token">
               <li class="layui-hide-xs"><span class="line"></span></li>
               <li class="layui-hide-xs"><a href="#">我发表的帖</a></li>
               <li class="layui-hide-xs"><a href="#">我收藏的帖</a></li>
@@ -63,8 +63,12 @@ export default {
           name: '动态',
           isNew: true
         }
-      ],
-      token: this.$store.state.token
+      ]
+    }
+  },
+  computed: {
+    userInfo () {
+      return this.$store.state.userInfo
     }
   }
 }

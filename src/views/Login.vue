@@ -125,6 +125,7 @@ import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import uuid from 'uuid/v4'
 
 import { getCaptcha, login } from '@/api/login'
+import router from '@/router'
 
 export default {
   name: 'LoginCom',
@@ -134,8 +135,8 @@ export default {
   },
   data: () => {
     return {
-      username: '',
-      password: '',
+      username: '3129166417@qq.com',
+      password: '123456',
       code: '',
       svg: ''
     }
@@ -172,13 +173,14 @@ export default {
         sid: this.$store.state.sid
       }).then(res => {
         if (res.code === 200) {
+          this.$store.commit('setUserInfo', res.data)
           this.username = ''
           this.password = ''
           this.code = ''
           requestAnimationFrame(() => {
-            this.$refs.form.reset()
+            // this.$refs.form.reset()
           })
-          console.log(res)
+          router.push('/')
         } else {
           if (res.code === 404) {
             this.$refs.pwdField.setErrors([res.msg])

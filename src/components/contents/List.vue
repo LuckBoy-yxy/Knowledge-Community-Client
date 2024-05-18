@@ -114,7 +114,6 @@ export default {
         isTop: 0
       }
       getList(options).then(res => {
-        console.log(res)
         if (res.code === 200) {
           if (res.data.length < this.pagseSize) {
             this.isEnd = true

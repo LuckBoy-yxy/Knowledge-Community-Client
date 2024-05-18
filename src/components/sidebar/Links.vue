@@ -27,7 +27,7 @@ export default {
     }
   },
   created () {
-    this.getLinks()
+    // this.getLinks()
   },
   methods: {
     getLinks () {
