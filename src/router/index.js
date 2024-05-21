@@ -14,6 +14,10 @@ const Posts = () => import(/* webpackChunkName: 'posts' */ '../views/Center/comp
 const Messages = () => import(/* webpackChunkName: 'messages' */ '../views/Center/components/Message.vue')
 const Others = () => import(/* webpackChunkName: 'others' */ '../views/Center/components/Others.vue')
 const User = () => import(/* webpackChunkName: 'user' */ '../views/User/index.vue')
+const Accounts = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/Accounts.vue')
+const MyInfo = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/MyInfo.vue')
+const PicUpload = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/PicUpload.vue')
+const Passwd = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/Passwd.vue')
 
 Vue.use(VueRouter)
 
@@ -67,22 +71,44 @@ const routes = [
         component: UserCenter
       },
       {
-        path: '/settings',
+        path: 'settings',
         name: 'settings',
-        component: Settings
+        component: Settings,
+        children: [
+          {
+            path: '',
+            name: 'info',
+            component: MyInfo
+          },
+          {
+            path: 'pic',
+            name: 'pic',
+            component: PicUpload
+          },
+          {
+            path: 'passwd',
+            name: 'passwd',
+            component: Passwd
+          },
+          {
+            path: 'account',
+            name: 'account',
+            component: Accounts
+          }
+        ]
       },
       {
-        path: '/posts',
+        path: 'posts',
         name: 'posts',
         component: Posts
       },
       {
-        path: '/messages',
+        path: 'messages',
         name: 'messages',
         component: Messages
       },
       {
-        path: '/others',
+        path: 'others',
         name: 'others',
         component: Others
       }
@@ -98,7 +124,8 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  linkActiveClass: 'layui-this'
+  // linkActiveClass: 'layui-this'
+  linkExactActiveClass: 'layui-this'
 })
 
 export default router
