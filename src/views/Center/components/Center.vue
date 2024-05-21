@@ -139,14 +139,6 @@ export default {
   border: 1px solid #e6e6e6;
 }
 
-.pd20 {
-  padding: 20px;
-}
-
-.mt20 {
-  margin-top: -20px;
-}
-
 .title {
   height: 50px;
   line-height: 50px;

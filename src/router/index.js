@@ -18,6 +18,8 @@ const Accounts = () => import(/* webpackChunkName: 'accounts' */ '../views/Cente
 const MyInfo = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/MyInfo.vue')
 const PicUpload = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/PicUpload.vue')
 const Passwd = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/Passwd.vue')
+const MyPost = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/MyPost.vue')
+const MyCollection = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/MyCollection.vue')
 
 Vue.use(VueRouter)
 
@@ -100,7 +102,19 @@ const routes = [
       {
         path: 'posts',
         name: 'posts',
-        component: Posts
+        component: Posts,
+        children: [
+          {
+            path: '',
+            name: 'mypost',
+            component: MyPost
+          },
+          {
+            path: 'mycollection',
+            name: 'mycollection',
+            component: MyCollection
+          }
+        ]
       },
       {
         path: 'messages',

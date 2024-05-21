@@ -45,8 +45,10 @@ export default {
         {
           name: '我的帖子',
           icon: 'layui-icon-form',
-          path: 'posts',
-          flag: false
+          // path: 'posts',
+          path: 'mypost',
+          flag: false,
+          activeClass: 'layui-this'
         },
         {
           name: '我的消息',
