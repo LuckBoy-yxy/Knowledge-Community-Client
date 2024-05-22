@@ -138,7 +138,6 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  // linkActiveClass: 'layui-this'
   linkExactActiveClass: 'layui-this'
 })
 
