@@ -26,9 +26,16 @@ export default {
 
 .svg {
   position: relative;
+  top: -4px;
 }
 .gray {
-color: #999;
+  color: #999;
+}
+.orange {
+  color: #ff5722;
+}
+.pull-right {
+  float: right !important;
 }
 
 // pr0 {
