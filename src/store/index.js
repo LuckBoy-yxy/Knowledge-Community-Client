@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from '@/router'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     sid: '',
-    userInfo: JSON.parse(localStorage.getItem('userInfo')) || {}
+    userInfo: {}
   },
   getters: {
   },
@@ -21,6 +22,7 @@ export default new Vuex.Store({
     logout (state) {
       state.userInfo = {}
       localStorage.setItem('userInfo', JSON.stringify({}))
+      router.push('/login')
     }
   },
   actions: {
