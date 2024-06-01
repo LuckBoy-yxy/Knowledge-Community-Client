@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
 
+import jwt from 'jsonwebtoken'
+import moment from 'moment'
+
 const Login = () => import(/* webpackChunkName: 'login' */ '../views/Login.vue')
 const Reg = () => import(/* webpackChunkName: 'reg' */ '../views/Reg.vue')
 const Forget = () => import(/* webpackChunkName: 'forget' */ '../views/Forget.vue')
@@ -155,7 +158,12 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   if (userInfo !== null && userInfo.token) {
-    store.commit('setUserInfo', userInfo)
+    const payload = jwt.decode(userInfo.token)
+    if (moment().isBefore(moment(payload.exp * 1000))) {
+      store.commit('setUserInfo', userInfo)
+    } else {
+      localStorage.clear()
+    }
   } else {
     store.commit('setUserInfo', {})
   }
