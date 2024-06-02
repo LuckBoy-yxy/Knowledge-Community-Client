@@ -42,151 +42,29 @@
     </div>
 
     <!-- 签到说明板块内容 -->
-    <div class="modal" v-show="isShow">
-      <div class="mask" @click="close()"></div>
-
-      <div class="layui-layer layui-layer-page" :class="{active: isShow}">
-        <div class="layui-layer-title">
-          签到说明
-          <i class="layui-icon layui-icon-close pull-right" @click="close()"></i>
-        </div>
-
-        <div class="layui-layer-content">
-          <div class="layui-text">
-            <blockquote class="layui-elem-quote">“签到”可获得的社区积分，规则如下</blockquote>
-            <table class="layui-table">
-              <thead>
-                <tr>
-                  <th>连续签到天数</th>
-                  <th>每天可获积分</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>&lt;5</td>
-                  <td>5</td>
-                </tr>
-                <tr>
-                  <td>&ge;5</td>
-                  <td>10</td>
-                </tr>
-                <tr>
-                  <td>&ge;15</td>
-                  <td>15</td>
-                </tr>
-                <tr>
-                  <td>&ge;30</td>
-                  <td>20</td>
-                </tr>
-                <tr>
-                  <td>&ge;100</td>
-                  <td>30</td>
-                </tr>
-                <tr>
-                  <td>&ge;365</td>
-                  <td>50</td>
-                </tr>
-              </tbody>
-            </table>
-            <div>
-              <p>中间若有间隔，则连续天数重新计算</p>
-              <p class="orange">不可复用程序自动签到，否则积分清零</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <SignInfo :isShow="isShow" @closeModal="close" />
 
     <!-- 签到活跃榜板块内容 -->
-    <div class="modal" v-show="showList">
-      <div class="mask" @click="close"></div>
-
-      <div class="layui-layer layui-layer-page">
-        <div class="layui-layer-title">
-          签到活跃榜 - TOP20
-          <i
-            class="layui-icon layui-icon-close pull-right"
-            @click="close"
-          ></i>
-        </div>
-
-        <div class="layui-layer-content pd0">
-          <div class="layui-tab layui-tab-brief">
-            <ul class="layui-tab-title">
-              <li
-                :class="{ 'layui-this': current === 0 }"
-                @click="choose(0)"
-              >最新签到</li>
-              <li
-                :class="{ 'layui-this': current === 1 }"
-                @click="choose(1)"
-              >今日最快</li>
-              <li
-                :class="{ 'layui-this': current === 2 }"
-                @click="choose(2)"
-              >总签到榜</li>
-            </ul>
-
-            <div class="layui-tab-content">
-              <ul class="layui-tab-item">
-                <li
-                  v-for="(item, index) in lists"
-                  :key="'sign' + index"
-                >
-                  <img src="../../assets/bear-200-200.jpg" alt="" class="mr1">
-                  <cite class="fly-link">{{ item.name }}</cite>
-                  <span
-                    v-if="current !== 2"
-                    class="fly-grey"
-                  >
-                    签到于 {{ item.created }}
-                  </span>
-                  <span
-                    v-else
-                    class="fly-grey"
-                  >
-                    已经连续签到 <i class="orange">{{ item.count }}</i> 天
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <SignList :isShow="showList" :lists="lists" @closeModal="close" />
   </div>
 </template>
 
 <script>
+import SignInfo from './SignInfo.vue'
+import SignList from './SignList.vue'
+
 export default {
   name: 'SignCom',
+  components: {
+    SignInfo,
+    SignList
+  },
   data () {
     return {
       isShow: false,
       showList: false,
       current: 0,
-      lists: [
-        {
-          name: 'test1',
-          count: 4,
-          created: '一天前'
-        },
-        {
-          name: 'test2',
-          count: 3,
-          created: '一天前'
-        },
-        {
-          name: 'test3',
-          count: 2,
-          created: '一天前'
-        },
-        {
-          name: 'test4',
-          count: 1,
-          created: '一天前'
-        }
-      ]
+      lists: []
     }
   },
   methods: {
@@ -199,9 +77,6 @@ export default {
     close () {
       this.isShow = false
       this.showList = false
-    },
-    choose (index) {
-      this.current = index
     }
   }
 }
