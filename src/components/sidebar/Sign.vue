@@ -1,5 +1,6 @@
 <template>
   <div class="fly-panel fly-signin">
+    <!-- 签到版块头部内容 -->
     <div class="fly-panel-title">
       签到
       <i class="fly-mid"></i>
@@ -9,7 +10,6 @@
         id="LAY_signinHelp"
         @click="showInfo"
       >说明</a>
-
       <i class="fly-mid"></i>
       <a href="javascript:;" class="fly-link" id="LAY_signinTop">
         活跃榜
@@ -20,6 +20,8 @@
         <cite>16</cite>天
       </span>
     </div>
+
+    <!-- 签到板块主体内容 -->
     <div class="fly-panel-main fly-signin-main">
       <button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>
       <span>
@@ -34,6 +36,7 @@
       -->
     </div>
 
+    <!-- 签到说明板块内容 -->
     <div class="modal" v-show="isShow">
       <div class="mask" @click="close()"></div>
 
@@ -88,6 +91,41 @@
         </div>
       </div>
     </div>
+
+    <!-- 签到活跃榜板块内容 -->
+    <div class="modal" v-show="showList">
+      <div class="mask"></div>
+
+      <div class="layui-layer layui-layer-page">
+        <div class="layui-layer-title">
+          签到活跃榜 - TOP20
+          <i class="layui-icon layui-icon-close pull-right"></i>
+        </div>
+
+        <div class="layui-layer-content pd0">
+          <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+              <li class="layui-this">最新签到</li>
+              <li>今日最快</li>
+              <li>总签到榜</li>
+            </ul>
+
+            <div class="layui-tab-content">
+              <ul class="layui-tab-item">
+                <li
+                  v-for="(item, index) in lists"
+                  :key="'sign' + index"
+                >
+                  <img src="../../assets/bear-200-200.jpg" alt="" class="mr1">
+                  <cite class="fly-link">{{ item.name }}</cite>
+                  <span class="fly-grey">已经连续签到 <i class="orange">{{ item.count }}</i>天</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -96,7 +134,26 @@ export default {
   name: 'SignCom',
   data () {
     return {
-      isShow: false
+      isShow: false,
+      showList: true,
+      lists: [
+        {
+          name: 'test1',
+          count: 4
+        },
+        {
+          name: 'test2',
+          count: 3
+        },
+        {
+          name: 'test3',
+          count: 2
+        },
+        {
+          name: 'test4',
+          count: 1
+        }
+      ]
     }
   },
   methods: {
@@ -155,6 +212,24 @@ export default {
   }
   .layui-layer-content {
     padding: 20px;
+    .layui-tab-item {
+      line-height: 45px;
+      img {
+        // margin-left: 10px;
+        width: 30px;
+        height: 30px;
+        border-radius: 2px;
+      }
+      li {
+        border-bottom: 1px dotted #dcdcdc;
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+  .layui-tab-content {
+    padding: 0 10px;
   }
 }
 </style>
