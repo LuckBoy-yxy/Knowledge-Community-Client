@@ -22,23 +22,30 @@
       </a>
       <span class="fly-signin-days">
         已连续签到
-        <cite>16</cite>天
+        <cite>{{ count }}</cite>天
       </span>
     </div>
 
     <!-- 签到板块主体内容 -->
     <div class="fly-panel-main fly-signin-main">
-      <button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>
-      <span>
-        可获得
-        <cite>5</cite>飞吻
-      </span>
+      <!-- 没有签到的模板 -->
+      <template v-if="!isSign">
+        <button
+          class="layui-btn layui-btn-danger"
+          id="LAY_signin"
+          @click="sign"
+        >今日签到</button>
+        <span>
+          可获得
+          <cite>5</cite>飞吻
+        </span>
+      </template>
 
       <!-- 已签到状态 -->
-      <!--
-          <button class="layui-btn layui-btn-disabled">今日已签到</button>
-          <span>获得了<cite>20</cite>飞吻</span>
-      -->
+      <template v-else>
+        <button class="layui-btn layui-btn-disabled">今日已签到</button>
+        <span>获得了<cite>{{ favs }}</cite>飞吻</span>
+      </template>
     </div>
 
     <!-- 签到说明板块内容 -->
@@ -52,6 +59,8 @@
 <script>
 import SignInfo from './SignInfo.vue'
 import SignList from './SignList.vue'
+
+import userSign from '@/api/user.js'
 
 export default {
   name: 'SignCom',
@@ -77,6 +86,56 @@ export default {
     close () {
       this.isShow = false
       this.showList = false
+    },
+    sign () {
+      if (!this.$store.state.userInfo.token) {
+        return this.$alert('请先登录')
+      }
+      userSign().then(res => {
+        if (res.code === 200) {
+          const user = this.$store.state.userInfo
+          user.count = res.count
+          user.favs = res.favs
+          this.$store.commit('setUserInfo', user)
+        } else {
+          this.$alert('今日已经签到过了')
+        }
+      })
+    }
+  },
+  computed: {
+    favs () {
+      let fav = 0
+      const count = parseInt(this.count)
+      if (count < 5) {
+        fav = 5
+      } else if (count >= 5 && count < 15) {
+        fav = 10
+      } else if (count >= 15 && count < 30) {
+        fav = 15
+      } else if (count >= 30 && count < 100) {
+        fav = 20
+      } else if (count >= 100 && count < 365) {
+        fav = 30
+      } else if (count >= 365) {
+        fav = 50
+      }
+
+      return fav
+    },
+    count () {
+      if (this.$store.state.userInfo.token) {
+        if (typeof this.$store.state.userInfo.count !== 'undefined') {
+          return this.$store.state.userInfo.count
+        } else {
+          return 0
+        }
+      } else {
+        return 0
+      }
+    },
+    isSign () {
+      return this.$store.state.userInfo.isSign || false
     }
   }
 }
