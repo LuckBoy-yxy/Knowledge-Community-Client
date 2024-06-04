@@ -20,7 +20,10 @@
         活跃榜
         <span class="layui-badge-dot"></span>
       </a>
-      <span class="fly-signin-days">
+      <span
+        class="fly-signin-days"
+        v-show="isSign || token"
+      >
         已连续签到
         <cite>{{ count }}</cite>天
       </span>
@@ -35,9 +38,9 @@
           id="LAY_signin"
           @click="sign"
         >今日签到</button>
-        <span>
+        <span v-show="token">
           可获得
-          <cite>5</cite>飞吻
+          <cite>{{ favs }}</cite>飞吻
         </span>
       </template>
 
@@ -57,6 +60,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 import SignInfo from './SignInfo.vue'
 import SignList from './SignList.vue'
 
@@ -73,7 +78,22 @@ export default {
       isShow: false,
       showList: false,
       current: 0,
-      lists: []
+      lists: [],
+      isSign: false
+    }
+  },
+  mounted () {
+    if (this.$store.state.userInfo.token) {
+      const isSign = this.$store.state.userInfo.isSign
+      const lastSign = this.$store.state.userInfo.lastSign
+      const nowDate = moment().format('YYYY-MM-DD')
+      const lastDate = moment(lastSign).format('YYYY-MM-DD')
+      const diff = moment(nowDate).diff(moment(lastDate), 'days')
+      if (diff > 0 && isSign) {
+        this.isSign = false
+      } else {
+        this.isSign = true
+      }
     }
   },
   methods: {
@@ -93,17 +113,18 @@ export default {
         return this.$pop('请先登录', 'shake')
       }
       userSign().then(res => {
+        const user = this.$store.state.userInfo
         if (res.code === 200) {
-          const user = this.$store.state.userInfo
-          user.count = res.count
-          user.favs = res.favs
-          user.isSign = true
-          this.$store.commit('setUserInfo', user)
+          user.count = res.data.count
+          user.favs = res.data.favs
           this.$pop('登录成功')
         } else {
           // this.$alert('今日已经签到过了')
           this.$pop('今日已经签到过了')
         }
+        user.isSign = true
+        user.lastSign = res.data.lastSign
+        this.$store.commit('setUserInfo', user)
       })
     }
   },
@@ -138,8 +159,8 @@ export default {
         return 0
       }
     },
-    isSign () {
-      return this.$store.state.userInfo.isSign || false
+    token () {
+      return this.$store.state.userInfo.token
     }
   }
 }
