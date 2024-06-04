@@ -89,16 +89,20 @@ export default {
     },
     sign () {
       if (!this.$store.state.userInfo.token) {
-        return this.$alert('请先登录')
+        // return this.$alert('请先登录')
+        return this.$pop('请先登录', 'shake')
       }
       userSign().then(res => {
         if (res.code === 200) {
           const user = this.$store.state.userInfo
           user.count = res.count
           user.favs = res.favs
+          user.isSign = true
           this.$store.commit('setUserInfo', user)
+          this.$pop('登录成功')
         } else {
-          this.$alert('今日已经签到过了')
+          // this.$alert('今日已经签到过了')
+          this.$pop('今日已经签到过了')
         }
       })
     }
