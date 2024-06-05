@@ -19,7 +19,10 @@
       <ul class="layui-nav fly-nav-user">
         <template v-if="!userInfo.token">
           <li class="layui-nav-item">
-            <a class="iconfont icon-touxiang layui-hide-xs" href="../user/login.html"></a>
+            <RouterLink
+              class="iconfont icon-touxiang layui-hide-xs"
+              to="/user123"
+            ></RouterLink>
           </li>
           <li class="layui-nav-item">
             <RouterLink :to="{ name: 'login' }">登入</RouterLink>
@@ -77,6 +80,7 @@
 </template>
 
 <script>
+
 let timeId = null
 
 export default {

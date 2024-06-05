@@ -24,6 +24,7 @@ const PicUpload = () => import(/* webpackChunkName: 'accounts' */ '../views/Cent
 const Passwd = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/Passwd.vue')
 const MyPost = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/MyPost.vue')
 const MyCollection = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/MyCollection.vue')
+const NotFound = () => import(/* webpackChunkName: '404' */ '../views/404')
 
 Vue.use(VueRouter)
 
@@ -147,6 +148,14 @@ const routes = [
     name: 'home',
     props: true,
     component: User
+  },
+  {
+    path: '/404',
+    component: NotFound
+  },
+  {
+    path: '*',
+    redirect: '/404'
   }
 ]
 
