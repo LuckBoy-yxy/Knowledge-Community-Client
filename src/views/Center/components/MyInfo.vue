@@ -113,7 +113,7 @@
             style="height: 80px;"
             name="sign"
             placeholder="随便写些什么刷下存在感"
-            v-model="remark"
+            v-model="regmark"
           ></textarea>
         </div>
       </div>
@@ -131,6 +131,8 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 
+import { updateUserInfo } from '@/api/user'
+
 export default {
   name: 'MyInfo',
   components: {
@@ -143,14 +145,33 @@ export default {
       name: '',
       location: '',
       gender: '0',
-      remark: ''
+      regmark: ''
     }
+  },
+  mounted () {
+    const { username, name, location, gender, regmark } = this.$store.state.userInfo
+    this.username = username || ''
+    this.name = name || ''
+    this.location = location || ''
+    this.gender = gender || ''
+    this.regmark = regmark || ''
   },
   methods: {
     submit () {
       const res = this.$refs.form.validate()
       if (!res) return
-      console.log(res)
+
+      updateUserInfo({
+        username: this.username,
+        name: this.name,
+        location: this.location,
+        gender: this.gender,
+        regmark: this.regmark
+      }).then(res => {
+        if (res.code === 200) {
+          this.$alert('用户资料更新成功')
+        }
+      })
     }
   }
 }

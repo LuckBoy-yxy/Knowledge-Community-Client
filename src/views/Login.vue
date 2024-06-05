@@ -173,6 +173,7 @@ export default {
         sid: this.$store.state.sid
       }).then(res => {
         if (res.code === 200) {
+          res.data.username = this.username
           this.$store.commit('setUserInfo', res.data)
           this.username = ''
           this.password = ''

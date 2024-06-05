@@ -1,5 +1,7 @@
 import axios from 'axios'
 import errorHandle from './errorHandle'
+import store from '@/store'
+import publicConfig from '@/config'
 
 const CancelToken = axios.CancelToken
 
@@ -37,6 +39,18 @@ class HttpRequest {
       config.cancelToken = new CancelToken(c => {
         this.pending[key] = c
       })
+
+      let isPublic = false
+      publicConfig.publicPath.forEach(path => {
+        isPublic = path.test(config.url) || isPublic
+      })
+      const token = store.state.userInfo.token
+      if (token && !isPublic) {
+        config.headers = {
+          Authorization: 'Bearer ' + store.state.userInfo.token
+          // 'Content-Type': 'application/json'
+        }
+      }
       return config
     }, err => {
       errorHandle(err)
