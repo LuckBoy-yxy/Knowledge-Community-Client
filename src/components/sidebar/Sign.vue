@@ -160,7 +160,6 @@ export default {
           const lastSign = this.$store.state.userInfo.lastSign
           const nowDate = moment().format('YYYY-MM-DD')
           const lastDate = moment(lastSign).format('YYYY-MM-DD')
-          console.log(lastDate)
           const diff = moment(nowDate).diff(moment(lastDate), 'days')
           if (diff <= 1 && count > 0) {
             return count

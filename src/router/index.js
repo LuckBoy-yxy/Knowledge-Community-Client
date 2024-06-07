@@ -25,6 +25,8 @@ const Passwd = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/
 const MyPost = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/MyPost.vue')
 const MyCollection = () => import(/* webpackChunkName: 'accounts' */ '../views/Center/components/MyCollection.vue')
 const NotFound = () => import(/* webpackChunkName: '404' */ '../views/404')
+const Confirm = () => import(/* webpackChunkName: 'confirm' */ '../views/Confirm')
+const Reset = () => import(/* webpackChunkName: 'reset' */ '../views/Reset')
 
 Vue.use(VueRouter)
 
@@ -33,6 +35,16 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/confirm',
+    name: 'confirm',
+    component: Confirm
+  },
+  {
+    path: '/reset',
+    name: 'reset',
+    component: Reset
   },
   {
     path: '/reg',
