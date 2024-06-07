@@ -22,7 +22,7 @@
       </a>
       <span
         class="fly-signin-days"
-        v-show="isSign || token"
+        v-show="count && token"
       >
         已连续签到
         <cite>{{ count }}</cite>天
@@ -65,7 +65,7 @@ import moment from 'moment'
 import SignInfo from './SignInfo.vue'
 import SignList from './SignList.vue'
 
-import userSign from '@/api/user.js'
+import { userSign } from '@/api/user.js'
 
 export default {
   name: 'SignCom',
@@ -85,14 +85,18 @@ export default {
   mounted () {
     if (this.$store.state.userInfo.token) {
       const isSign = this.$store.state.userInfo.isSign
-      const lastSign = this.$store.state.userInfo.lastSign
-      const nowDate = moment().format('YYYY-MM-DD')
-      const lastDate = moment(lastSign).format('YYYY-MM-DD')
-      const diff = moment(nowDate).diff(moment(lastDate), 'days')
-      if (diff > 0 && isSign) {
-        this.isSign = false
-      } else {
-        this.isSign = true
+      if (this.$store.state.userInfo.lastSign) {
+        const lastSign = this.$store.state.userInfo.lastSign
+        const nowDate = moment().format('YYYY-MM-DD')
+        const lastDate = moment(lastSign).format('YYYY-MM-DD')
+        const diff = moment(nowDate).diff(moment(lastDate), 'days')
+        if (diff > 0) {
+          if (isSign) {
+            this.isSign = false
+          }
+        } else {
+          this.isSign = true
+        }
       }
     }
   },
@@ -117,11 +121,12 @@ export default {
         if (res.code === 200) {
           user.count = res.data.count
           user.favs = res.data.favs
-          this.$pop('登录成功')
+          this.$pop('签到成功')
         } else {
           // this.$alert('今日已经签到过了')
           this.$pop('今日已经签到过了')
         }
+        this.isSign = true
         user.isSign = true
         user.lastSign = res.data.lastSign
         this.$store.commit('setUserInfo', user)
@@ -150,8 +155,18 @@ export default {
     },
     count () {
       if (this.$store.state.userInfo.token) {
-        if (typeof this.$store.state.userInfo.count !== 'undefined') {
-          return this.$store.state.userInfo.count
+        const count = this.$store.state.userInfo.count
+        if (typeof count !== 'undefined') {
+          const lastSign = this.$store.state.userInfo.lastSign
+          const nowDate = moment().format('YYYY-MM-DD')
+          const lastDate = moment(lastSign).format('YYYY-MM-DD')
+          console.log(lastDate)
+          const diff = moment(nowDate).diff(moment(lastDate), 'days')
+          if (diff <= 1 && count > 0) {
+            return count
+          } else {
+            return 0
+          }
         } else {
           return 0
         }
