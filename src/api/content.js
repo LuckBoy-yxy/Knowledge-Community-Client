@@ -28,3 +28,8 @@ export const getTipsOrLinks = type => {
 export const getTopWeek = () => {
   return request.get('/public/topWeek')
 }
+
+// 图片上传接口
+export const uploadImg = formData => {
+  return request.post('/content/upload', formData)
+}
