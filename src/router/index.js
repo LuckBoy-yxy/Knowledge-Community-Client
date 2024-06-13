@@ -27,6 +27,7 @@ const MyCollection = () => import(/* webpackChunkName: 'accounts' */ '../views/C
 const NotFound = () => import(/* webpackChunkName: '404' */ '../views/404')
 const Confirm = () => import(/* webpackChunkName: 'confirm' */ '../views/Confirm')
 const Reset = () => import(/* webpackChunkName: 'reset' */ '../views/Reset')
+const Add = () => import(/* webpackChunkName: 'add' */ '../views/Centent/Add.vue')
 
 Vue.use(VueRouter)
 
@@ -160,6 +161,11 @@ const routes = [
     name: 'home',
     props: true,
     component: User
+  },
+  {
+    path: '/add',
+    name: 'add',
+    component: Add
   },
   {
     path: '/404',
