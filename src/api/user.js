@@ -24,3 +24,8 @@ export const updateUserInfo = data => {
 export const updateUserName = data => {
   return axios.get('/public/reset-email?' + qs.stringify(data))
 }
+
+// 修改用户密码的接口
+export const changePasswd = data => {
+  return axios.post('/user/change-password', data)
+}
