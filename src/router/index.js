@@ -27,7 +27,7 @@ const MyCollection = () => import(/* webpackChunkName: 'accounts' */ '../views/C
 const NotFound = () => import(/* webpackChunkName: '404' */ '../views/404')
 const Confirm = () => import(/* webpackChunkName: 'confirm' */ '../views/Confirm')
 const Reset = () => import(/* webpackChunkName: 'reset' */ '../views/Reset')
-const Add = () => import(/* webpackChunkName: 'add' */ '../views/Centent/Add.vue')
+const Add = () => import(/* webpackChunkName: 'add' */ '../views/Content/Add.vue')
 
 Vue.use(VueRouter)
 
