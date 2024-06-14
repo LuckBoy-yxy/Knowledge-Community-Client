@@ -125,7 +125,7 @@
                       >
                     </div>
                     <div class="svg layui-form-mid">
-                      <span v-html="svg" @click="_getCaptcha"></span>
+                      <span v-html="svg" @click="_getCaptcha($store.state.sid)"></span>
                     </div>
                     <span class="layui-form-mid layui-word-aux error">{{ errors[0] }}</span>
                   </ValidationProvider>
