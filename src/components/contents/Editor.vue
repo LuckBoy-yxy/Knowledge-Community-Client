@@ -3,7 +3,10 @@
     <div class="layui-form-item layui-form-text">
       <div class="layui-input-block">
         <div class="layui-unselect fly-edit">
-          <span>
+          <span
+            ref="face"
+            @click="() => this.faceStatus = !this.faceStatus"
+          >
             <i class="iconfont icon-yxj-expression"></i>
           </span>
           <span>
@@ -32,16 +35,62 @@
         ></textarea>
       </div>
     </div>
+    <Face
+      :isShow="faceStatus"
+      :ctrl="this.$refs.face"
+      @closeFaceEvent="() => this.faceStatus = false"
+    />
   </div>
 </template>
 
 <script>
+import Face from './Face.vue'
+
 export default {
-  name: 'EditorCom'
+  name: 'EditorCom',
+  components: {
+    Face
+  },
+  data () {
+    return {
+      faceStatus: false
+    }
+  }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes bounceOut {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
+.fade-leave-active {
+  animation: bounceOut 0.3s;
+}
+.fade-enter-active,
+.fade-enter-to {
+  animation: bounceIn 0.3s;
+}
+
 .fly-editor {
   height: 260px;
 }
@@ -50,5 +99,8 @@ export default {
   top: 4px;
   vertical-align: middle;
   font-size: 22px;
+}
+.edit-wrap {
+  position: relative;
 }
 </style>
