@@ -38,7 +38,7 @@
                             type="text"
                             readonly
                             placeholder="请选择"
-                            v-model="catalogs[cataIndex].text"
+                            :value="catalogs[cataIndex].text"
                           >
                           <i class="layui-edge"></i>
                         </div>
@@ -79,7 +79,7 @@
                       </select> -->
                       <div
                         class="layui-unselect layui-form-select"
-                      :class="{'layui-form-selected': isSelectFav}"
+                        :class="{'layui-form-selected': isSelectFav}"
                         @click="open('fav')"
                       >
                         <div class="layui-select-title">
@@ -87,7 +87,7 @@
                             class="layui-input layui-unselect"
                             type="text"
                             readonly
-                            v-model="favList[favIndex]"
+                            :value="favList[favIndex]"
                           >
                           <i class="layui-edge"></i>
                         </div>
@@ -144,18 +144,14 @@
 </template>
 
 <script>
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import uuid from 'uuid/v4'
-
-import { getCaptcha } from '@/api/common'
-
 import Editor from '@/components/contents/Editor.vue'
+
+import codeMixin from '@/mixins/code.js'
 
 export default {
   name: 'AddCom',
+  mixins: [codeMixin],
   components: {
-    ValidationObserver,
-    ValidationProvider,
     Editor
   },
   data () {
@@ -186,22 +182,8 @@ export default {
           value: 'advise'
         }
       ],
-      favList: [20, 30, 50, 60, 80],
-      svg: '',
-      code: ''
+      favList: [20, 30, 50, 60, 80]
     }
-  },
-  mounted () {
-    let sid = ''
-    if (localStorage.getItem('sid')) {
-      sid = localStorage.getItem('sid')
-    } else {
-      sid = uuid()
-      localStorage.setItem('sid', sid)
-    }
-
-    this.$store.commit('setSid', sid)
-    this._getCaptcha(sid)
   },
   methods: {
     chooseCatalog (option, index) {
@@ -221,12 +203,6 @@ export default {
         if (this.isSelect) {
           this.isSelect = false
         }
-      }
-    },
-    async _getCaptcha (sid) {
-      const res = await getCaptcha(sid)
-      if (res.code === 200) {
-        this.svg = res.data
       }
     }
   }
