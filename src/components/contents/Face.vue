@@ -66,9 +66,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.edit-content {
-  position: absolute;
-  top: 40px;
-  left: 0;
-}
+
 </style>

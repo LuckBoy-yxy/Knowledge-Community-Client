@@ -9,7 +9,10 @@
           >
             <i class="iconfont icon-yxj-expression"></i>
           </span>
-          <span>
+          <span
+            ref="img"
+            @click="() => this.imgStatus = !this.imgStatus"
+          >
             <i class="iconfont icon-tupian"></i>
           </span>
           <span>
@@ -40,20 +43,34 @@
       :ctrl="this.$refs.face"
       @closeFaceEvent="() => this.faceStatus = false"
     />
+    <ImgUpload
+      :isShow="imgStatus"
+      :ctrl="this.$refs.img"
+      @addImgEvent="addImg"
+      @closeImgEvent="() => this.imgStatus = false"
+    />
   </div>
 </template>
 
 <script>
 import Face from './Face.vue'
+import ImgUpload from './ImgUpload.vue'
 
 export default {
   name: 'EditorCom',
   components: {
-    Face
+    Face,
+    ImgUpload
   },
   data () {
     return {
-      faceStatus: false
+      faceStatus: false,
+      imgStatus: false
+    }
+  },
+  methods: {
+    addImg (imgUrl) {
+      console.log(imgUrl)
     }
   }
 }
@@ -102,5 +119,11 @@ export default {
 }
 .edit-wrap {
   position: relative;
+}
+
+.edit-content {
+  position: absolute;
+  top: 40px;
+  left: 0;
 }
 </style>
