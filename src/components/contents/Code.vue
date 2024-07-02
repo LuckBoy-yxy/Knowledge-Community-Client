@@ -1,0 +1,71 @@
+<template>
+  <transition name="fade">
+    <div class="layui-layer layui-layer-page layui-layer-prompt edit-content" v-show="isShow">
+      <div class="layui-layer-title">请贴入代码或任意文本</div>
+      <div class="layui-layer-content">
+        <textarea
+          class="layui-layer-input"
+          v-model="code"
+          id="inputItem"
+          v-on:keydown.enter="$event.stopPropagation()"
+          :style="{'width': this.width + 'px', 'height': this.height + 'px'}"
+        ></textarea>
+      </div>
+      <span class="layui-layer-setwin" @click="close()">
+        <a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
+      </span>
+      <div class="layui-layer-btn layui-layer-btn-">
+        <a class="layui-layer-btn0" @click.prevent="submit()">确定</a>
+        <a class="layui-layer-btn1" @click.prevent="cancel()">取消</a>
+      </div>
+    </div>
+  </transition>
+</template>
+
+<script>
+export default {
+  name: 'CodeCom',
+  props: {
+    isShow: {
+      type: Boolean,
+      default: false
+    },
+    width: {
+      type: Number,
+      default: 400
+    },
+    height: {
+      type: Number,
+      default: 150
+    }
+  },
+  data () {
+    return {
+      code: ''
+    }
+  },
+  methods: {
+    close () {
+      this.$emit('closeCodeEvent')
+      this.code = ''
+    },
+    cancel () {
+      this.close()
+    },
+    submit () {
+      if (this.code === '') {
+        return this.$pop('请先输入您想要添加的代码', 'shake')
+      }
+
+      this.$emit('addCodeEvent', this.code)
+      setTimeout(() => {
+        this.close()
+      }, 0)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+</style>

@@ -24,7 +24,9 @@
           >
             ”
           </span>
-          <span>
+          <span
+            @click="() => this.codeStatus = !this.codeStatus"
+          >
             <i class="iconfont icon-daima"></i>
           </span>
           <span>
@@ -38,6 +40,7 @@
         <textarea
           class="layui-textarea fly-editor"
           name="content"
+          ref="textEdit"
         ></textarea>
       </div>
     </div>
@@ -63,6 +66,13 @@
         @addQuoteEvent="addQuote"
         @closeQuoteEvent="() => this.quoteStatus = false"
       />
+      <Code
+        :isShow="codeStatus"
+        :width="codeWidth"
+        :height="codeHeight"
+        @addCodeEvent="addCode"
+        @closeCodeEvent="() => this.codeStatus = false"
+      />
     </div>
   </div>
 </template>
@@ -72,6 +82,7 @@ import Face from './Face.vue'
 import ImgUpload from './ImgUpload.vue'
 import LinkAdd from './LinkAdd.vue'
 import Quote from './Quote.vue'
+import Code from './Code.vue'
 
 export default {
   name: 'EditorCom',
@@ -79,14 +90,18 @@ export default {
     Face,
     ImgUpload,
     LinkAdd,
-    Quote
+    Quote,
+    Code
   },
   data () {
     return {
       faceStatus: false,
       imgStatus: false,
       linkStatus: false,
-      quoteStatus: false
+      quoteStatus: false,
+      codeStatus: false,
+      codeWidth: 400,
+      codeHeight: 200
     }
   },
   mounted () {
@@ -94,6 +109,12 @@ export default {
       document.body.addEventListener('click', e => {
         this.handleBodyClick(e)
       })
+    })
+    this.codeWidth = this.$refs.textEdit?.offsetWidth - 60
+    this.codeHeight = this.$refs.textEdit?.offsetHeight - 80
+    window.addEventListener('resize', () => {
+      this.codeWidth = this.$refs.textEdit.offsetWidth - 60
+      this.codeHeight = this.$refs.textEdit.offsetHeight - 80
     })
   },
   beforeDestroy () {
@@ -112,12 +133,16 @@ export default {
     addQuote (quote) {
       console.log(quote)
     },
+    addCode (code) {
+      console.log(code)
+    },
     handleBodyClick (e) {
       if (!(this.$refs.icons?.contains(e.target) || this.$refs.modal?.contains(e.target))) {
         this.faceStatus = false
         this.imgStatus = false
         this.linkStatus = false
         this.quoteStatus = false
+        this.codeStatus = false
       }
     }
   }
@@ -173,5 +198,6 @@ export default {
   position: absolute;
   top: 40px;
   left: 0;
+  z-index: 100;
 }
 </style>
