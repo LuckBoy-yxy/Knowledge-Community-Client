@@ -3,7 +3,6 @@
     <div
       class="layui-layer layui-layer-page layui-layer-prompt edit-content"
       v-show="isShow"
-      ref="wrapper"
     >
       <div class="layui-layer-title">请输入合法链接</div>
       <div class="layui-layer-content">
@@ -23,23 +22,24 @@
 <script>
 export default {
   name: 'LinkAdd',
-  props: ['isShow', 'ctrl'],
+  // props: ['isShow', 'ctrl'],
+  props: ['isShow'],
   data () {
     return {
       link: ''
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      document.body.addEventListener('click', (e) => {
-        console.log(111)
-        this.handleBodyClick(e)
-      })
-    })
-  },
-  beforeDestroy () {
-    document.body.removeEventListener('click', this.handleBodyClick)
-  },
+  // mounted () {
+  //   this.$nextTick(() => {
+  //     document.body.addEventListener('click', (e) => {
+  //       console.log(111)
+  //       this.handleBodyClick(e)
+  //     })
+  //   })
+  // },
+  // beforeDestroy () {
+  //   document.body.removeEventListener('click', this.handleBodyClick)
+  // },
   methods: {
     close () {
       this.$emit('closeLinkEvent')
@@ -56,12 +56,12 @@ export default {
       setTimeout(() => {
         this.close()
       }, 0)
-    },
-    handleBodyClick (e) {
-      if (!(this.ctrl?.contains(e.target) || this.$refs.wrapper?.contains(e.target))) {
-        this.close()
-      }
     }
+    // handleBodyClick (e) {
+    //   if (!(this.ctrl?.contains(e.target) || this.$refs.wrapper?.contains(e.target))) {
+    //     this.close()
+    //   }
+    // }
   }
 }
 </script>

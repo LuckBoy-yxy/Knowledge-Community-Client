@@ -3,7 +3,6 @@
     <div
       class="layui-layer layui-layer-page layui-layer-border edit-content"
       v-show="isShow"
-      ref="wrapper"
     >
       <div class="layui-layer-title">插入图片</div>
 
@@ -66,31 +65,14 @@ import config from '@/config'
 
 export default {
   name: 'ImgUpload',
-  props: ['isShow', 'ctrl'],
+  props: ['isShow'],
   data () {
     return {
       url: '',
       formData: ''
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      document.body.addEventListener('click', (e) => {
-        this.handleBodyClick(e)
-      })
-    })
-  },
-  beforeDestroy () {
-    document.querySelector('body').removeEventListener('click', this.handleBodyClick)
-  },
   methods: {
-    handleBodyClick (e) {
-      if (!(this.ctrl?.contains(e.target) || this.$refs.wrapper?.contains(e.target))) {
-        this.$emit('closeImgEvent')
-        this.url = ''
-        this.formData = ''
-      }
-    },
     close () {
       this.$emit('closeImgEvent')
       this.url = ''

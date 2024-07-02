@@ -2,7 +2,7 @@
   <div class="edit-wrap">
     <div class="layui-form-item layui-form-text">
       <div class="layui-input-block">
-        <div class="layui-unselect fly-edit">
+        <div class="layui-unselect fly-edit" ref="icons">
           <span
             ref="face"
             @click="() => this.faceStatus = !this.faceStatus"
@@ -41,24 +41,27 @@
         ></textarea>
       </div>
     </div>
-    <Face
-      :isShow="faceStatus"
-      :ctrl="this.$refs.face"
-      @addFaceEvent="addFace"
-      @closeFaceEvent="() => this.faceStatus = false"
-    />
-    <ImgUpload
-      :isShow="imgStatus"
-      :ctrl="this.$refs.img"
-      @addImgEvent="addImg"
-      @closeImgEvent="() => this.imgStatus = false"
-    />
-    <LinkAdd
-      :isShow="linkStatus"
-      :ctrl="this.$refs.link"
-      @addLinkEvent="addLink"
-      @closeLinkEvent="() => this.linkStatus = false"
-    />
+
+    <div ref="modal">
+      <Face
+        :isShow="faceStatus"
+        :ctrl="this.$refs.face"
+        @addFaceEvent="addFace"
+        @closeFaceEvent="() => this.faceStatus = false"
+      />
+      <ImgUpload
+        :isShow="imgStatus"
+        :ctrl="this.$refs.img"
+        @addImgEvent="addImg"
+        @closeImgEvent="() => this.imgStatus = false"
+      />
+      <LinkAdd
+        :isShow="linkStatus"
+        :ctrl="this.$refs.link"
+        @addLinkEvent="addLink"
+        @closeLinkEvent="() => this.linkStatus = false"
+      />
+    </div>
   </div>
 </template>
 
@@ -81,6 +84,16 @@ export default {
       linkStatus: false
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      document.body.addEventListener('click', e => {
+        this.handleBodyClick(e)
+      })
+    })
+  },
+  beforeDestroy () {
+    document.body.removeEventListener('click', this.handleBodyClick)
+  },
   methods: {
     addFace (face) {
       console.log(face)
@@ -90,6 +103,13 @@ export default {
     },
     addLink (link) {
       console.log(link)
+    },
+    handleBodyClick (e) {
+      if (!(this.$refs.icons?.contains(e.target) || this.$refs.modal?.contains(e.target))) {
+        this.faceStatus = false
+        this.imgStatus = false
+        this.linkStatus = false
+      }
     }
   }
 }

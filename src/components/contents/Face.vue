@@ -34,32 +34,16 @@ export default {
   //     default: () => {}
   //   }
   // },
-  props: ['isShow', 'ctrl'],
+  props: ['isShow'],
   data () {
     return {
       faceList: face
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      document.body.addEventListener('click', (e) => {
-        this.handleBodyClick(e)
-      })
-      // document.querySelector('body').addEventListener('click', this.handleBodyClick)
-    })
-  },
-  beforeDestroy () {
-    document.querySelector('body').removeEventListener('click', this.handleBodyClick)
-  },
   methods: {
     handleFaceClick (key) {
       this.$emit('addFaceEvent', key)
-    },
-    handleBodyClick (e) {
-      // e.stopPropagation()
-      if (!this.ctrl?.contains(e.target)) {
-        this.$emit('closeFaceEvent')
-      }
+      this.$emit('closeFaceEvent')
     }
   }
 }
