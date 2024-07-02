@@ -20,7 +20,7 @@
         </div>
         <div class="right layui-hide-xs">
           <i class="layui-icon layui-icon-search"></i>
-          <div class="layui-btn">发表新帖</div>
+          <router-link to="/add" class="layui-btn">发表新帖</router-link>
         </div>
       </div>
     </div>

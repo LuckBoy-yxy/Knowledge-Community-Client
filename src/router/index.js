@@ -165,6 +165,9 @@ const routes = [
   {
     path: '/add',
     name: 'add',
+    meta: {
+      requireAuth: true
+    },
     component: Add
   },
   {
