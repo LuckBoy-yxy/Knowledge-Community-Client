@@ -4,24 +4,24 @@
       <div class="layui-input-block">
         <div class="layui-unselect fly-edit" ref="icons">
           <span
-            ref="face"
             @click="() => this.faceStatus = !this.faceStatus"
           >
             <i class="iconfont icon-yxj-expression"></i>
           </span>
           <span
-            ref="img"
             @click="() => this.imgStatus = !this.imgStatus"
           >
             <i class="iconfont icon-tupian"></i>
           </span>
           <span
-            ref="link"
             @click="() => this.linkStatus = !this.linkStatus"
           >
             <i class="iconfont icon-lianjie"></i>
           </span>
-          <span class="quote">
+          <span
+            class="quote"
+            @click="() => this.quoteStatus = !this.quoteStatus"
+          >
             ”
           </span>
           <span>
@@ -45,21 +45,23 @@
     <div ref="modal">
       <Face
         :isShow="faceStatus"
-        :ctrl="this.$refs.face"
         @addFaceEvent="addFace"
         @closeFaceEvent="() => this.faceStatus = false"
       />
       <ImgUpload
         :isShow="imgStatus"
-        :ctrl="this.$refs.img"
         @addImgEvent="addImg"
         @closeImgEvent="() => this.imgStatus = false"
       />
       <LinkAdd
         :isShow="linkStatus"
-        :ctrl="this.$refs.link"
         @addLinkEvent="addLink"
         @closeLinkEvent="() => this.linkStatus = false"
+      />
+      <Quote
+        :isShow="quoteStatus"
+        @addQuoteEvent="addQuote"
+        @closeQuoteEvent="() => this.quoteStatus = false"
       />
     </div>
   </div>
@@ -69,19 +71,22 @@
 import Face from './Face.vue'
 import ImgUpload from './ImgUpload.vue'
 import LinkAdd from './LinkAdd.vue'
+import Quote from './Quote.vue'
 
 export default {
   name: 'EditorCom',
   components: {
     Face,
     ImgUpload,
-    LinkAdd
+    LinkAdd,
+    Quote
   },
   data () {
     return {
       faceStatus: false,
       imgStatus: false,
-      linkStatus: false
+      linkStatus: false,
+      quoteStatus: false
     }
   },
   mounted () {
@@ -104,11 +109,15 @@ export default {
     addLink (link) {
       console.log(link)
     },
+    addQuote (quote) {
+      console.log(quote)
+    },
     handleBodyClick (e) {
       if (!(this.$refs.icons?.contains(e.target) || this.$refs.modal?.contains(e.target))) {
         this.faceStatus = false
         this.imgStatus = false
         this.linkStatus = false
+        this.quoteStatus = false
       }
     }
   }
