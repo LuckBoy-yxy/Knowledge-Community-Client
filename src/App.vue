@@ -88,4 +88,10 @@ export default {
 .text-right {
   text-align: right;
 }
+
+.d-hide {
+  overflow: hidden;
+  position: absolute;
+  height: 0;
+}
 </style>

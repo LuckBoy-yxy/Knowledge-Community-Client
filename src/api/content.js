@@ -33,3 +33,8 @@ export const getTopWeek = () => {
 export const uploadImg = formData => {
   return request.post('/content/upload', formData)
 }
+
+// 发表新帖接口
+export const addPost = postData => {
+  return request.post('/content/add', postData)
+}

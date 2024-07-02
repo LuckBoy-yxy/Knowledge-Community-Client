@@ -1,5 +1,5 @@
 <template>
-  <div class="layui-container fly-marginTop">
+  <div class="layui-container fly-marginTop" :class="{'d-hide': isHide}">
     <div class="fly-panel" pad20 style="padding-top: 5px;">
       <!--<div class="fly-none">没有权限</div>-->
       <div class="layui-form layui-form-pane">
@@ -58,13 +58,22 @@
                   <div class="layui-col-md9">
                     <label for="L_title" class="layui-form-label">标题</label>
                     <div class="layui-input-block">
-                      <input type="text" id="L_title" name="title" required lay-verify="required" autocomplete="off" class="layui-input">
+                      <input
+                        type="text"
+                        id="L_title"
+                        autocomplete="off"
+                        class="layui-input"
+                        v-model="title"
+                      >
                       <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
                     </div>
                   </div>
                 </div>
 
-                <Editor />
+                <Editor
+                  @changeContent="handleChangeContent"
+                  :initContent="content"
+                />
 
                 <div class="layui-form-item">
                   <div class="layui-inline">
@@ -132,7 +141,13 @@
                 </div>
 
                 <div class="layui-form-item">
-                  <button class="layui-btn" lay-filter="*" lay-submit>立即发布</button>
+                  <button
+                    type="button"
+                    class="layui-btn"
+                    lay-filter="*"
+                    lay-submit
+                    @click="submit"
+                  >立即发布</button>
                 </div>
               </ValidationObserver>
             </div>
@@ -148,6 +163,7 @@ import Editor from '@/components/contents/Editor.vue'
 
 import codeMixin from '@/mixins/code.js'
 
+import { addPost } from '@/api/content'
 export default {
   name: 'AddCom',
   mixins: [codeMixin],
@@ -160,6 +176,8 @@ export default {
       isSelectFav: false,
       cataIndex: 0,
       favIndex: 0,
+      content: '',
+      title: '',
       catalogs: [
         {
           text: '请选择',
@@ -185,6 +203,11 @@ export default {
       favList: [20, 30, 50, 60, 80]
     }
   },
+  computed: {
+    isHide () {
+      return this.$store.state.isHide
+    }
+  },
   methods: {
     chooseCatalog (option, index) {
       this.cataIndex = index
@@ -204,6 +227,51 @@ export default {
           this.isSelect = false
         }
       }
+    },
+    handleChangeContent (value) {
+      this.content = value
+      if (this.content.trim()) {
+        const saveData = {
+          title: this.title,
+          cataIndex: this.cataIndex,
+          favIndex: this.favIndex,
+          content: this.content
+        }
+        localStorage.setItem('addData', JSON.stringify(saveData))
+      }
+    },
+    async submit () {
+      if (!this.cataIndex) return this.$pop('请选择帖子专栏', 'shake')
+      if (!this.title.trim()) return this.$pop('请输入帖子标题', 'shake')
+      if (!this.content.trim()) return this.$pop('请输入帖子内容', 'shake')
+
+      const isValid = await this.$refs.form.validate()
+      if (!isValid) return
+
+      addPost({
+        title: this.title,
+        catalog: this.catalogs[this.cataIndex].value,
+        content: this.content,
+        fav: this.favList[this.favIndex],
+        code: this.code,
+        sid: this.$store.state.sid
+      }).then(res => {
+        console.log(res)
+      })
+    }
+  },
+  mounted () {
+    const saveData = JSON.parse(localStorage.getItem('addData'))
+    if (saveData) {
+      this.$confirm('是否加载先前未完成的内容', () => {
+        localStorage.setItem('addData', '')
+      }, () => {
+        const { title, content, favIndex, cataIndex } = saveData
+        this.title = title
+        this.content = content
+        this.favIndex = favIndex
+        this.cataIndex = cataIndex
+      })
     }
   }
 }

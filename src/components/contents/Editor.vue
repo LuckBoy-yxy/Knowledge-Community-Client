@@ -34,7 +34,9 @@
           >
             hr
           </span>
-          <span>
+          <span
+            @click="() => this.previewStatus = !this.previewStatus"
+          >
             <i class="iconfont icon-yulan1"></i>
           </span>
         </div>
@@ -79,6 +81,11 @@
         @addCodeEvent="addCode"
         @closeCodeEvent="() => this.codeStatus = false"
       />
+      <Preview
+        :isShow="previewStatus"
+        :content="content"
+        @closePreviewEvent="() => this.previewStatus = false"
+      />
     </div>
   </div>
 </template>
@@ -89,6 +96,7 @@ import ImgUpload from './ImgUpload.vue'
 import LinkAdd from './LinkAdd.vue'
 import Quote from './Quote.vue'
 import Code from './Code.vue'
+import Preview from './Preview.vue'
 
 export default {
   name: 'EditorCom',
@@ -97,7 +105,14 @@ export default {
     ImgUpload,
     LinkAdd,
     Quote,
-    Code
+    Code,
+    Preview
+  },
+  props: {
+    initContent: {
+      type: String,
+      default: ''
+    }
   },
   data () {
     return {
@@ -106,6 +121,7 @@ export default {
       linkStatus: false,
       quoteStatus: false,
       codeStatus: false,
+      previewStatus: false,
       codeWidth: 400,
       codeHeight: 200,
       content: '',
@@ -121,9 +137,13 @@ export default {
     this.codeWidth = this.$refs.textEdit?.offsetWidth - 60
     this.codeHeight = this.$refs.textEdit?.offsetHeight - 80
     window.addEventListener('resize', () => {
-      this.codeWidth = this.$refs.textEdit.offsetWidth - 60
-      this.codeHeight = this.$refs.textEdit.offsetHeight - 80
+      this.codeWidth = this.$refs.textEdit?.offsetWidth - 60
+      this.codeHeight = this.$refs.textEdit?.offsetHeight - 80
     })
+  },
+  updated () {
+    // console.log(this.content)
+    this.$emit('changeContent', this.content)
   },
   beforeDestroy () {
     document.body.removeEventListener('click', this.handleBodyClick)
@@ -172,6 +192,7 @@ export default {
       const tmp = this.content.split('')
       tmp.splice(this.pos, 0, val)
       this.content = tmp.join('')
+      // this.$emit('changeContent', this.content)
     },
     getPos () {
       let currentPos = 0
@@ -191,6 +212,11 @@ export default {
     },
     blurEvent () {
       this.getPos()
+    }
+  },
+  watch: {
+    initContent (newVal) {
+      this.content = newVal
     }
   }
 }

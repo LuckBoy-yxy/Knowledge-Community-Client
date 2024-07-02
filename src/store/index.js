@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     sid: '',
-    userInfo: {}
+    userInfo: {},
+    isHide: false
   },
   getters: {
   },
@@ -23,6 +24,9 @@ export default new Vuex.Store({
       state.userInfo = {}
       localStorage.setItem('userInfo', JSON.stringify({}))
       router.push('/login')
+    },
+    setHide (state, value) {
+      state.isHide = value
     }
   },
   actions: {
