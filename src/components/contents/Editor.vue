@@ -15,7 +15,10 @@
           >
             <i class="iconfont icon-tupian"></i>
           </span>
-          <span>
+          <span
+            ref="link"
+            @click="() => this.linkStatus = !this.linkStatus"
+          >
             <i class="iconfont icon-lianjie"></i>
           </span>
           <span class="quote">
@@ -41,6 +44,7 @@
     <Face
       :isShow="faceStatus"
       :ctrl="this.$refs.face"
+      @addFaceEvent="addFace"
       @closeFaceEvent="() => this.faceStatus = false"
     />
     <ImgUpload
@@ -49,28 +53,43 @@
       @addImgEvent="addImg"
       @closeImgEvent="() => this.imgStatus = false"
     />
+    <LinkAdd
+      :isShow="linkStatus"
+      :ctrl="this.$refs.link"
+      @addLinkEvent="addLink"
+      @closeLinkEvent="() => this.linkStatus = false"
+    />
   </div>
 </template>
 
 <script>
 import Face from './Face.vue'
 import ImgUpload from './ImgUpload.vue'
+import LinkAdd from './LinkAdd.vue'
 
 export default {
   name: 'EditorCom',
   components: {
     Face,
-    ImgUpload
+    ImgUpload,
+    LinkAdd
   },
   data () {
     return {
       faceStatus: false,
-      imgStatus: false
+      imgStatus: false,
+      linkStatus: false
     }
   },
   methods: {
+    addFace (face) {
+      console.log(face)
+    },
     addImg (imgUrl) {
       console.log(imgUrl)
+    },
+    addLink (link) {
+      console.log(link)
     }
   }
 }
