@@ -29,7 +29,9 @@
           >
             <i class="iconfont icon-daima"></i>
           </span>
-          <span>
+          <span
+            @click="addHr"
+          >
             hr
           </span>
           <span>
@@ -38,9 +40,13 @@
         </div>
 
         <textarea
+          id="editContent"
           class="layui-textarea fly-editor"
           name="content"
           ref="textEdit"
+          v-model="content"
+          @focus="focusEvent"
+          @blur="blurEvent"
         ></textarea>
       </div>
     </div>
@@ -101,7 +107,9 @@ export default {
       quoteStatus: false,
       codeStatus: false,
       codeWidth: 400,
-      codeHeight: 200
+      codeHeight: 200,
+      content: '',
+      pos: ''
     }
   },
   mounted () {
@@ -121,20 +129,34 @@ export default {
     document.body.removeEventListener('click', this.handleBodyClick)
   },
   methods: {
-    addFace (face) {
-      console.log(face)
+    addFace (item) {
+      const insertContent = ` face${item}`
+      this.insert(insertContent)
+      this.pos += insertContent.length
     },
     addImg (imgUrl) {
-      console.log(imgUrl)
+      const insertContent = ` img[${imgUrl}]`
+      this.insert(insertContent)
+      this.pos += insertContent.length
     },
     addLink (link) {
-      console.log(link)
+      const insertContent = ` a(${link})[${link}]`
+      this.insert(insertContent)
+      this.pos += insertContent.length
     },
     addQuote (quote) {
-      console.log(quote)
+      const insertContent = ` \n[quote]\n${quote}\n[/quote]`
+      this.insert(insertContent)
+      this.pos += insertContent.length
     },
     addCode (code) {
-      console.log(code)
+      const insertContent = ` \n[pre]\n${code}\n[/pre]`
+      this.insert(insertContent)
+      this.pos += insertContent.length
+    },
+    addHr () {
+      this.insert('\n[hr]')
+      this.pos += 5
     },
     handleBodyClick (e) {
       if (!(this.$refs.icons?.contains(e.target) || this.$refs.modal?.contains(e.target))) {
@@ -144,6 +166,31 @@ export default {
         this.quoteStatus = false
         this.codeStatus = false
       }
+    },
+    insert (val) {
+      if (typeof this.content === 'undefined') return
+      const tmp = this.content.split('')
+      tmp.splice(this.pos, 0, val)
+      this.content = tmp.join('')
+    },
+    getPos () {
+      let currentPos = 0
+      const elem = document.getElementById('editContent')
+      if (document.selection) {
+        const selecRange = document.selection.createRange()
+        selecRange.moveStart('character', -elem.value.length)
+        currentPos = selecRange.text.length
+      } else if (elem.selectionStart || elem.selectionStart === '0') {
+        currentPos = elem.selectionStart
+      }
+
+      this.pos = currentPos
+    },
+    focusEvent () {
+      this.getPos()
+    },
+    blurEvent () {
+      this.getPos()
     }
   }
 }
