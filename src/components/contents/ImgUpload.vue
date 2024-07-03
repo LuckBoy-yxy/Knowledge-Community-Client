@@ -1,7 +1,7 @@
 <template>
   <Transition name="fade">
     <div
-      class="layui-layer layui-layer-page layui-layer-border edit-content"
+      class="layui-layer-page layui-layer-border edit-content"
       v-show="isShow"
     >
       <div class="layui-layer-title">插入图片</div>

@@ -269,8 +269,12 @@ export default {
 
 .edit-content {
   position: absolute;
+  z-index: 100;
   top: 40px;
   left: 0;
-  z-index: 100;
+  background-color: #fff;
+}
+.layui-layer-prompt {
+  box-shadow: 0 0 20px rgba(0, 0, 0, .2);
 }
 </style>
