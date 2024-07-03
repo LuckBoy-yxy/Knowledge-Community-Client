@@ -164,6 +164,7 @@ import Editor from '@/components/contents/Editor.vue'
 import codeMixin from '@/mixins/code.js'
 
 import { addPost } from '@/api/content'
+import router from '@/router'
 export default {
   name: 'AddCom',
   mixins: [codeMixin],
@@ -256,7 +257,15 @@ export default {
         code: this.code,
         sid: this.$store.state.sid
       }).then(res => {
-        console.log(res)
+        if (res.code === 200) {
+          this.$pop(res.msg + ', 2秒钟之后跳转')
+          setTimeout(() => {
+            localStorage.setItem('addData', '')
+            router.push('/')
+          }, 2000)
+        } else {
+          this.$pop(res.msg)
+        }
       })
     }
   },
