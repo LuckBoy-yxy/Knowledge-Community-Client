@@ -261,6 +261,7 @@ export default {
     }
   },
   mounted () {
+    if (!localStorage.getItem('addData')) return
     const saveData = JSON.parse(localStorage.getItem('addData'))
     if (saveData) {
       this.$confirm('是否加载先前未完成的内容', () => {
