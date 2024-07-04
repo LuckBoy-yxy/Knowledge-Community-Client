@@ -173,6 +173,9 @@
           <pagination
             showType="icon"
             :hasSelect="true"
+            :total="101"
+            :currPage="1"
+            :pageSize="10"
           />
 
           <!-- 书写评论区域 -->

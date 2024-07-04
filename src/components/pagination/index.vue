@@ -11,9 +11,9 @@
       <!-- 首页 -->
       <a
         href="javascript:;"
-        class="layui-laypage-prev layui-disabled"
-        data-page="0"
+        class="layui-laypage-prev"
         v-show="showEnd"
+        :class="[ currPage === 1 ? 'layui-disabled' : '' ]"
       >
         <i
           v-if="showType === 'icon'"
@@ -23,7 +23,10 @@
       </a>
 
       <!-- 上一页 -->
-      <a href="javascript:;" data-page="2">
+      <a
+        href="javascript:;"
+        :class="{ 'layui-disabled': currPage === 1 }"
+      >
         <i
           v-if="showType === 'icon'"
           class="layui-icon layui-icon-left"
@@ -31,19 +34,37 @@
         <template v-else>上一页</template>
       </a>
 
-      <a href="javascript:;"
-        :class="[
-          true ? theme : '',
-          true ? 'active' : ''
-        ]"
-      >1</a>
-      <a href="javascript:;">2</a>
-      <a href="javascript:;">3</a>
-      <a href="javascript:;">4</a>
-      <a href="javascript:;">5</a>
+      <a
+        href="javascript:;"
+        v-if="pages.length > 5 && currPage - 2 > 1"
+      >
+        ...
+      </a>
+      <template v-for="(item, index) in pages" >
+        <a
+          href="javascript:;"
+          v-if="item >= (currPage - 2) && item <= (currPage + 2)"
+          :key="index"
+          :class="[
+            currPage === item ? 'active' : '',
+            currPage === item ? theme : ''
+          ]"
+        >
+          {{ item }}
+        </a>
+      </template>
+      <a
+        href="javascript:;"
+        v-if="pages.length > 5 && currPage + 2 < pages.length"
+      >
+        ...
+      </a>
 
       <!-- 下一页 -->
-      <a href="javascript:;" data-page="2">
+      <a
+        href="javascript:;"
+        :class="{ 'layui-disabled': currPage === pages.length }"
+      >
         <i
           v-if="showType === 'icon'"
           class="layui-icon layui-icon-right"
@@ -55,8 +76,8 @@
       <a
         href="javascript:;"
         class="layui-laypage-next"
-        data-page="2"
         v-show="showEnd"
+        :class="[ currPage === pages.length ? 'layui-disabled' : '' ]"
       >
         <i
           v-if="showType === 'icon'"
@@ -69,7 +90,7 @@
     <!-- 跳转指定页码区域 -->
     <div class="total" v-if="hasTotal">
       到第
-      <input type="text" class="imooc-input" /> 页&emsp;共 100 页
+      <input type="text" class="imooc-input" /> 页&emsp;共 {{ Math.ceil(total / pageSize) }} 页
     </div>
 
     <!-- 限制页码区域 -->
@@ -103,6 +124,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   name: 'PaginationCom',
   props: {
@@ -130,14 +153,34 @@ export default {
     hasSelect: {
       type: Boolean,
       default: false
+    },
+    total: {
+      type: Number,
+      default: 0
+    },
+    currPage: {
+      type: Number,
+      default: 1
+    },
+    pageSize: {
+      type: Number,
+      default: 10
     }
   },
   data () {
     return {
       isSelect: false,
       optIndex: 0,
-      options: [10, 20, 30, 50, 100]
+      options: [10, 20, 30, 50, 100],
+      pages: [],
+      limit: 10
     }
+  },
+  mounted () {
+    this.initPages()
+    this.limit = this.pageSize
+    this.options = _.uniq(_.sortBy(_.concat(this.options, this.pageSize)))
+    this.optIndex = this.options.indexOf(this.pageSize)
   },
   methods: {
     changePageSize () {
@@ -145,6 +188,10 @@ export default {
     },
     choosePageSize (pageSize, index) {
       this.optIndex = index
+    },
+    initPages () {
+      const len = Math.ceil(this.total / this.pageSize)
+      this.pages = _.range(1, len + 1)
     }
   }
 }
