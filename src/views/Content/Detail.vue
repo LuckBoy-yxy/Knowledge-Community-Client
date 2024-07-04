@@ -169,6 +169,9 @@
             <!-- <li class="fly-none">消灭零回复</li> -->
           </ul>
 
+          <!-- 分页组件 -->
+          <pagination />
+
           <!-- 书写评论区域 -->
           <div class="layui-form layui-form-pane">
             <form>
@@ -228,6 +231,7 @@ import Ads from '@/components/sidebar/Ads'
 import Links from '@/components/sidebar/Links'
 import Panel from '@/views/Home/components/Panel.vue'
 import Editor from '@/components/contents/Editor.vue'
+import pagination from '@/components/pagination'
 
 import CodeMix from '@/mixins/code'
 
@@ -239,7 +243,8 @@ export default {
     Ads,
     Links,
     Editor,
-    Panel
+    Panel,
+    pagination
   }
 }
 </script>
