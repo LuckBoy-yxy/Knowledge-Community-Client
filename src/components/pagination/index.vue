@@ -1,9 +1,10 @@
 <template>
   <div
+    class="d-flex"
     :class="{
-      'text-center': align === 'center',
-      'text-left': align === 'left',
-      'text-right': align === 'right'
+      'flex-center': align === 'center',
+      'flex-left': align === 'left',
+      'flex-right': align === 'right'
     }"
   >
     <div class="layui-box layui-laypage layui-laypage-default">
@@ -20,6 +21,7 @@
         ></i>
         <template v-else>首页</template>
       </a>
+
       <!-- 上一页 -->
       <a href="javascript:;" data-page="2">
         <i
@@ -48,6 +50,7 @@
         ></i>
         <template v-else>下一页</template>
       </a>
+
       <!-- 尾页 -->
       <a
         href="javascript:;"
@@ -61,6 +64,40 @@
         ></i>
         <template v-else>尾页</template>
       </a>
+    </div>
+
+    <!-- 跳转指定页码区域 -->
+    <div class="total" v-if="hasTotal">
+      到第
+      <input type="text" class="imooc-input" /> 页&emsp;共 100 页
+    </div>
+
+    <!-- 限制页码区域 -->
+    <div v-if="hasSelect">
+      <div
+        class="layui-unselect layui-form-select"
+        :class="{'layui-form-selected': isSelect}"
+        @click="changePageSize"
+      >
+        <div class="layui-select-title">
+          <input
+            type="text"
+            placeholder="请选择"
+            readonly
+            v-model="options[optIndex]"
+            class="layui-input layui-unselect"
+          />
+          <i class="layui-edge"></i>
+        </div>
+        <dl class="layui-anim layui-anim-upbit">
+          <dd
+            v-for="(item,index) in options"
+            :key="'catalog' + index"
+            @click="choosePageSize(item, index)"
+            :class="{'layui-this': index === optIndex}"
+          >{{item}}</dd>
+        </dl>
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +122,29 @@ export default {
     theme: {
       type: String,
       default: 'layui-bg-green'
+    },
+    hasTotal: {
+      type: Boolean,
+      default: false
+    },
+    hasSelect: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      isSelect: false,
+      optIndex: 0,
+      options: [10, 20, 30, 50, 100]
+    }
+  },
+  methods: {
+    changePageSize () {
+      this.isSelect = !this.isSelect
+    },
+    choosePageSize (pageSize, index) {
+      this.optIndex = index
     }
   }
 }
@@ -114,13 +174,13 @@ export default {
   color: rgba(51, 51, 51, 1);
   margin-left: 20px;
   position: relative;
-  top: -2px;
+  top: -3.5px;
 }
 .imooc-input {
-  width: 30px;
   padding: 0 5px;
-  height: 28px;
-  line-height: 28px;
+  width: 30px;
+  height: 23px;
+  line-height: 23px;
 }
 
 .layui-input {

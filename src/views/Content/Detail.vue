@@ -170,7 +170,10 @@
           </ul>
 
           <!-- 分页组件 -->
-          <pagination />
+          <pagination
+            showType="icon"
+            :hasSelect="true"
+          />
 
           <!-- 书写评论区域 -->
           <div class="layui-form layui-form-pane">
