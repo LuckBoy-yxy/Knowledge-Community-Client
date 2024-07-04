@@ -28,6 +28,7 @@ const NotFound = () => import(/* webpackChunkName: '404' */ '../views/404')
 const Confirm = () => import(/* webpackChunkName: 'confirm' */ '../views/Confirm')
 const Reset = () => import(/* webpackChunkName: 'reset' */ '../views/Reset')
 const Add = () => import(/* webpackChunkName: 'add' */ '../views/Content/Add.vue')
+const Detail = () => import(/* webpackChunkName: 'detail' */ '../views/Content/Detail.vue')
 
 Vue.use(VueRouter)
 
@@ -169,6 +170,11 @@ const routes = [
       requireAuth: true
     },
     component: Add
+  },
+  {
+    path: '/detail',
+    name: 'detail',
+    component: Detail
   },
   {
     path: '/404',
