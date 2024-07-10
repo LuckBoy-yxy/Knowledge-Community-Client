@@ -243,9 +243,13 @@ import pagination from '@/components/pagination'
 
 import CodeMix from '@/mixins/code'
 
+import { getDetail } from '@/api/content'
+import { getComments } from '@/api/comments'
+
 export default {
   name: 'DetailCom',
   mixins: [CodeMix],
+  props: ['tid'],
   components: {
     HotList,
     Ads,
@@ -258,8 +262,15 @@ export default {
     return {
       currPage: 1,
       total: 100,
-      pageSize: 10
+      pageSize: 10,
+      page: {},
+      comments: []
     }
+  },
+  mounted () {
+    // console.log(this.$route.params.tid)
+    this.getPostDetail()
+    this.getCommentList()
   },
   methods: {
     handleChangePage (page) {
@@ -267,6 +278,16 @@ export default {
     },
     handleChangePageSize (pageSize) {
       this.pageSize = pageSize
+    },
+    getPostDetail () {
+      getDetail(this.tid).then(res => {
+        console.log(res)
+      })
+    },
+    getCommentList () {
+      getComments(this.tid).then(res => {
+        console.log(res)
+      })
     }
   }
 }
@@ -283,5 +304,12 @@ export default {
   span {
     margin-right: 5px;
   }
+}
+
+.jieda-body {
+  margin: 25px 0 20px !important;
+  min-height: 0;
+  line-height: 24px;
+  font-size: 14px;
 }
 </style>

@@ -38,3 +38,8 @@ export const uploadImg = formData => {
 export const addPost = postData => {
   return request.post('/content/add', postData)
 }
+
+// 获取帖子详情数据接口
+export const getDetail = tid => {
+  return request.get('/public/content/detail?tid=' + tid)
+}
