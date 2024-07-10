@@ -7,33 +7,99 @@
       <div class="layui-col-md8 content detail">
         <div class="fly-panel detail-box">
           <!-- 帖子标题 -->
-          <h1>Imooc社区，基于 layui 的极简社区页面模版</h1>
+          <h1>{{ page.title }}</h1>
 
           <!-- 帖子的标签 -->
           <div class="fly-detail-info">
             <!-- <span class="layui-badge">审核中</span> -->
-            <span class="layui-badge layui-bg-green fly-detail-column">动态</span>
+            <span
+              class="layui-badge layui-bg-green fly-detail-column"
+              v-if="page.catalog === 'ask'"
+            >提问</span>
+            <span
+              class="layui-badge layui-bg-green fly-detail-column"
+              v-else-if="page.catalog === 'share'"
+            >分享</span>
+            <span
+              class="layui-badge layui-bg-green fly-detail-column"
+              v-else-if="page.catalog === 'advise'"
+            >建议</span>
+            <span
+              class="layui-badge layui-bg-green fly-detail-column"
+              v-else-if="page.catalog === 'discuss'"
+            >交流</span>
+            <span
+              class="layui-badge layui-bg-green fly-detail-column"
+              v-else-if="page.catalog === 'logs'"
+            >动态</span>
+            <span
+              class="layui-badge layui-bg-green fly-detail-column"
+              v-else
+            >公告</span>
 
-            <span class="layui-badge" style="background-color: #999;">未结</span>
-            <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->
+            <span
+              class="layui-badge"
+              style="background-color: #999;"
+              v-if="page.isEnd === '0'"
+            >未结</span>
+            <span
+              class="layui-badge"
+              style="background-color: #5FB878;"
+              v-else
+            >已结</span>
 
-            <span class="layui-badge layui-bg-black">置顶</span>
-            <span class="layui-badge layui-bg-red">精帖</span>
+            <span
+              class="layui-badge layui-bg-black"
+              v-if="page.isTop === '1'"
+            >置顶</span>
+
+            <span
+              class="layui-badge layui-bg-red"
+              v-for="(tag, index) in page.tags"
+              :key="'tags' + index"
+              :class="tag.class"
+            >{{ tag.name }}</span>
 
             <div class="fly-admin-box" data-id="123">
-              <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>
+              <span
+                class="layui-btn layui-btn-xs jie-admin"
+                type="del"
+              >删除</span>
 
-              <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>
-              <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span> -->
+              <span
+                class="layui-btn layui-btn-xs jie-admin"
+                type="set"
+                field="stick"
+                rank="1"
+              >置顶</span>
+              <!-- <span
+                class="layui-btn layui-btn-xs jie-admin"
+                type="set"
+                field="stick"
+                rank="0"
+                style="background-color:#ccc;"
+              >取消置顶</span> -->
 
-              <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span>
-              <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
+              <span
+                class="layui-btn layui-btn-xs jie-admin"
+                type="set"
+                field="status"
+                rank="1"
+              >加精</span>
+              <!-- <span
+                class="layui-btn layui-btn-xs jie-admin"
+                type="set"
+                field="status"
+                rank="0"
+                style="background-color:#ccc;"
+              >取消加精</span> -->
             </div>
+
             <span class="fly-list-nums">
               <a href="#comment">
-                <i class="iconfont" title="回答">&#xe60c;</i> 66
+                <i class="iconfont" title="回答">&#xe60c;</i> {{ page.answer }}
               </a>
-              <i class="iconfont" title="人气">&#xe60b;</i> 99999
+              <i class="iconfont" title="人气">&#xe60b;</i> {{ page.reads }}
             </span>
           </div>
 
@@ -41,20 +107,26 @@
           <div class="detail-about">
             <a class="fly-avatar" href="../user/home.html">
               <img
-                src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg"
-                alt="贤心"
+                :src="page.user?.pic || '@/assets/img/bear-200-200.jpg'"
               />
             </a>
             <div class="fly-detail-user">
               <a href="../user/home.html" class="fly-link">
-                <cite>贤心</cite>
-                <i class="iconfont icon-renzheng" title="认证信息："></i>
-                <i class="layui-badge fly-badge-vip">VIP3</i>
+                <cite>{{ page.user?.name || 'test name' }} </cite>
+                <i class="iconfont icon-renzheng" title="认证信息："></i>&nbsp;
+                <i
+                  class="layui-badge fly-badge-vip"
+                  v-if="page.user?.isVip && page.user.isVip !== '0'"
+                >VIP{{ page.user.isVip }}</i>
               </a>
-              <span>2017-11-30</span>
+              <span>{{ page.created | momentDate }}</span>
             </div>
-            <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
-              <span style="padding-right: 10px; color: #FF7200">悬赏：60积分</span>
+            <div class="detail-hits">
+              <span
+                style="padding-right: 10px; color: #FF7200"
+              >
+                悬赏：{{ page.fav }} 积分
+              </span>
             </div>
           </div>
 
@@ -65,7 +137,7 @@
           </div>
 
           <!-- 当前帖子内容 -->
-          <div class="detail-body photos">这里是帖子的内容部分</div>
+          <div class="detail-body photos" v-html="page.content"></div>
         </div>
 
         <!-- 回帖相关的内容 -->
@@ -270,7 +342,7 @@ export default {
   mounted () {
     // console.log(this.$route.params.tid)
     this.getPostDetail()
-    this.getCommentList()
+    // this.getCommentList()
   },
   methods: {
     handleChangePage (page) {
@@ -281,7 +353,9 @@ export default {
     },
     getPostDetail () {
       getDetail(this.tid).then(res => {
-        console.log(res)
+        if (res.code === 200) {
+          this.page = res.data
+        }
       })
     },
     getCommentList () {

@@ -35,7 +35,7 @@
                   v-for="(item, index) in lists"
                   :key="'sign' + index"
                 >
-                  <img src="../../assets/bear-200-200.jpg" alt="" class="mr1">
+                  <img src="../../assets/img/bear-200-200.jpg" alt="" class="mr1">
                   <cite class="fly-link">{{ item.name }}</cite>
                   <span
                     v-if="current !== 2"
