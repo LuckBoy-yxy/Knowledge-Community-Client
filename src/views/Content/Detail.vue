@@ -173,9 +173,11 @@
           <pagination
             showType="icon"
             :hasSelect="true"
-            :total="101"
-            :currPage="1"
-            :pageSize="10"
+            :total="total"
+            :currPage="currPage"
+            :pageSize="pageSize"
+            @changeCurrentPage="handleChangePage"
+            @changePageSize="handleChangePageSize"
           />
 
           <!-- 书写评论区域 -->
@@ -251,6 +253,21 @@ export default {
     Editor,
     Panel,
     pagination
+  },
+  data () {
+    return {
+      currPage: 1,
+      total: 100,
+      pageSize: 10
+    }
+  },
+  methods: {
+    handleChangePage (page) {
+      this.currPage = page
+    },
+    handleChangePageSize (pageSize) {
+      this.pageSize = pageSize
+    }
   }
 }
 </script>

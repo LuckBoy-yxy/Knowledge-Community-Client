@@ -10,10 +10,10 @@
     <div class="layui-box layui-laypage layui-laypage-default">
       <!-- 首页 -->
       <a
-        href="javascript:;"
         class="layui-laypage-prev"
         v-show="showEnd"
         :class="[ currPage === 1 ? 'layui-disabled' : '' ]"
+        @click.prevent="home"
       >
         <i
           v-if="showType === 'icon'"
@@ -24,8 +24,8 @@
 
       <!-- 上一页 -->
       <a
-        href="javascript:;"
         :class="{ 'layui-disabled': currPage === 1 }"
+        @click.prevent="prev"
       >
         <i
           v-if="showType === 'icon'"
@@ -37,18 +37,19 @@
       <a
         href="javascript:;"
         v-if="pages.length > 5 && currPage - 2 > 1"
+        class="layui-disabled"
       >
         ...
       </a>
       <template v-for="(item, index) in pages" >
         <a
-          href="javascript:;"
           v-if="item >= (currPage - 2) && item <= (currPage + 2)"
           :key="index"
           :class="[
             currPage === item ? 'active' : '',
             currPage === item ? theme : ''
           ]"
+          @click="change(item)"
         >
           {{ item }}
         </a>
@@ -56,14 +57,15 @@
       <a
         href="javascript:;"
         v-if="pages.length > 5 && currPage + 2 < pages.length"
+        class="layui-disabled"
       >
         ...
       </a>
 
       <!-- 下一页 -->
       <a
-        href="javascript:;"
         :class="{ 'layui-disabled': currPage === pages.length }"
+        @click.prevent="next"
       >
         <i
           v-if="showType === 'icon'"
@@ -74,10 +76,10 @@
 
       <!-- 尾页 -->
       <a
-        href="javascript:;"
         class="layui-laypage-next"
         v-show="showEnd"
         :class="[ currPage === pages.length ? 'layui-disabled' : '' ]"
+        @click.prevent="end"
       >
         <i
           v-if="showType === 'icon'"
@@ -140,7 +142,7 @@ export default {
     },
     showEnd: {
       type: Boolean,
-      default: false
+      default: true
     },
     theme: {
       type: String,
@@ -172,13 +174,11 @@ export default {
       isSelect: false,
       optIndex: 0,
       options: [10, 20, 30, 50, 100],
-      pages: [],
-      limit: 10
+      pages: []
     }
   },
   mounted () {
     this.initPages()
-    this.limit = this.pageSize
     this.options = _.uniq(_.sortBy(_.concat(this.options, this.pageSize)))
     this.optIndex = this.options.indexOf(this.pageSize)
   },
@@ -187,11 +187,40 @@ export default {
       this.isSelect = !this.isSelect
     },
     choosePageSize (pageSize, index) {
-      this.optIndex = index
+      if (this.optIndex !== index) {
+        let oldPage = this.pageSize * this.currPage
+        if (oldPage > this.total) {
+          oldPage = this.total
+        }
+        this.$emit('changeCurrentPage', Math.ceil(oldPage / this.options[index]))
+        this.$emit('changePageSize', this.options[index])
+        this.optIndex = index
+        this.initPages(this.options[index])
+      }
     },
-    initPages () {
-      const len = Math.ceil(this.total / this.pageSize)
+    initPages (newPageSize) {
+      const len = Math.ceil(this.total / (newPageSize || this.pageSize))
       this.pages = _.range(1, len + 1)
+    },
+    home () {
+      if (this.currPage === 1) return
+      this.$emit('changeCurrentPage', 1)
+    },
+    prev () {
+      if (this.currPage === 1) return
+      this.$emit('changeCurrentPage', this.currPage - 1)
+    },
+    next () {
+      if (this.currPage === this.pages.length) return
+      this.$emit('changeCurrentPage', this.currPage + 1)
+    },
+    end () {
+      if (this.currPage === this.pages.length) return
+      this.$emit('changeCurrentPage', this.pages.length)
+    },
+    change (page) {
+      if (page === this.currPage) return
+      this.$emit('changeCurrentPage', page)
     }
   }
 }
