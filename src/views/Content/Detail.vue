@@ -314,6 +314,7 @@ import Editor from '@/components/contents/Editor.vue'
 import pagination from '@/components/pagination'
 
 import CodeMix from '@/mixins/code'
+import { escapeHtml } from '@/utils/escapeHtml'
 
 import { getDetail } from '@/api/content'
 import { getComments } from '@/api/comments'
@@ -354,6 +355,11 @@ export default {
     getPostDetail () {
       getDetail(this.tid).then(res => {
         if (res.code === 200) {
+          if (res.data.content?.trim()) {
+            res.data.content = escapeHtml(res.data.content)
+          } else {
+            res.data.content = '空空如也'
+          }
           this.page = res.data
         }
       })
