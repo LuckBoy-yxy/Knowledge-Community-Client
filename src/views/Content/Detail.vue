@@ -137,7 +137,7 @@
           </div>
 
           <!-- 当前帖子内容 -->
-          <div class="detail-body photos" v-html="page.content"></div>
+          <div class="detail-body photos mt1" v-html="page.content"></div>
         </div>
 
         <!-- 回帖相关的内容 -->
@@ -368,6 +368,15 @@ export default {
       getComments(this.tid).then(res => {
         console.log(res)
       })
+    }
+  },
+  computed: {
+    content () {
+      if (this.page.content?.trim()) {
+        return escapeHtml(this.page.content)
+      } else {
+        return '空空如也'
+      }
     }
   }
 }

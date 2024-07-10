@@ -7,7 +7,7 @@
         </a>
         <h2>
           <a class="layui-badge">{{ item.catalog }}</a>
-          <a href="jie/detail.html">{{ item.title }}</a>
+          <RouterLink :to="`/detail/${item._id}`">{{ item.title }}</RouterLink>
         </h2>
         <div class="fly-list-info">
           <a href="user/home.html" link>
