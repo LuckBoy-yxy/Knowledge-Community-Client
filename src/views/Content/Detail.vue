@@ -182,7 +182,11 @@
                   <span>{{ item.created | momentDate }}</span>
                 </div>
 
-                <!-- <i class="iconfont icon-caina" title="最佳答案"></i> -->
+                <i
+                  class="iconfont icon-caina"
+                  title="最佳答案"
+                  v-if="item.isBest === '1'"
+                ></i>
               </div>
 
               <!-- <div class="detail-body jieda-body photos" v-html="item.content"></div> -->
@@ -206,9 +210,16 @@
                   回复
                 </span>
                 <div class="jieda-admin">
-                  <span type="edit">编辑</span>
-                  <span type="del">删除</span>
-                  <!-- <span class="jieda-accept" type="accept">采纳</span> -->
+                  <span
+                    v-if="page.isEnd === '0' && item.cuid?._id === user._id"
+                    @click="edit(item)"
+                  >编辑</span>
+                  <!-- <span>删除</span> -->
+                  <span
+                    class="jieda-accept"
+                    v-if="page.user?._id === user._id"
+                    @click="setBest(item)"
+                  >采纳</span>
                 </div>
               </div>
             </li>
@@ -304,6 +315,7 @@ import pagination from '@/components/pagination'
 
 import CodeMix from '@/mixins/code'
 import { escapeHtml } from '@/utils/escapeHtml'
+import { scollToElem } from '@/utils/common'
 
 import { getDetail } from '@/api/content'
 import { getComments, addComment } from '@/api/comments'
@@ -334,6 +346,7 @@ export default {
     // console.log(this.$route.params.tid)
     this.getPostDetail()
     this.getCommentList()
+    // window.vue = scollToElem
   },
   methods: {
     handleChangePage (options) {
@@ -418,6 +431,25 @@ export default {
       } else if (res.code === 401) {
         this.$pop(res.msg)
       }
+    },
+    edit (comment) {
+      this.content = comment.content
+      scollToElem('.layui-input-block', 1000, -70)
+      document.getElementById('editContent').focus()
+    },
+    setBest (comment) {
+      this.$confirm('确定将此评论采纳为最佳答案吗', () => {}, () => {
+        this.comments.forEach(item => {
+          if (item._id === comment._id) {
+            item.isBest = '1'
+          }
+        })
+      })
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.state.userInfo
     }
   }
 }
