@@ -222,6 +222,11 @@ export default {
       if (page === this.currPage) return
       this.$emit('changeCurrentPage', page)
     }
+  },
+  watch: {
+    total (newVal, OldVal) {
+      this.initPages()
+    }
   }
 }
 </script>

@@ -306,7 +306,7 @@ export default {
   data () {
     return {
       currPage: 1,
-      total: 100,
+      total: 0,
       pageSize: 10,
       page: {},
       comments: []
@@ -340,17 +340,9 @@ export default {
       getComments(this.tid).then(res => {
         if (res.code === 200) {
           this.comments = res.data
+          this.total = res.total
         }
       })
-    }
-  },
-  computed: {
-    content () {
-      if (this.page.content?.trim()) {
-        return escapeHtml(this.page.content)
-      } else {
-        return '空空如也'
-      }
     }
   }
 }
