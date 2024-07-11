@@ -23,10 +23,11 @@ export default {
     }
 
     this.$store.commit('setSid', sid)
-    this._getCaptcha(sid)
+    this._getCaptcha()
   },
   methods: {
-    async _getCaptcha (sid) {
+    async _getCaptcha () {
+      const sid = this.$store.state.sid
       const res = await getCaptcha(sid)
       if (res.code === 200) {
         this.svg = res.data

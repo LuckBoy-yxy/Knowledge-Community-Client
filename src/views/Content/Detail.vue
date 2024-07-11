@@ -185,7 +185,11 @@
                 <!-- <i class="iconfont icon-caina" title="最佳答案"></i> -->
               </div>
 
-              <div class="detail-body jieda-body photos" v-html="item.content"></div>
+              <!-- <div class="detail-body jieda-body photos" v-html="item.content"></div> -->
+              <div
+                class="detail-body jieda-body photos"
+                v-richText="item.content"
+              ></div>
 
               <!-- :class="[item.handed === '1' ? 'zanok' : '']" -->
               <div class="jieda-reply">
@@ -227,51 +231,55 @@
           <!-- 书写评论区域 -->
           <div class="layui-form layui-form-pane">
             <form>
-              <Editor @changeContent="handleChangeContent" />
+              <validation-observer ref="observer">
+                <Editor
+                  @changeContent="handleChangeContent"
+                  :initContent="content"
+                />
 
-              <!-- 验证码 -->
-              <div class="layui-form-item">
-                <validation-provider
-                  name="code"
-                  ref="codefield"
-                  rules="required|code:6"
-                  v-slot="{errors}"
-                >
-                  <div class="layui-row">
-                    <label for="L_vercode" class="layui-form-label">验证码</label>
-                    <div class="layui-input-inline">
-                      <input
-                        type="text"
-                        name="code"
-                        v-model="code"
-                        placeholder="请输入验证码"
-                        autocomplete="off"
-                        class="layui-input"
-                      />
+                <!-- 验证码 -->
+                <div class="layui-form-item">
+                  <validation-provider
+                    name="code"
+                    rules="required|code:6"
+                    v-slot="{errors}"
+                  >
+                    <div class="layui-row">
+                      <label for="L_vercode" class="layui-form-label">验证码</label>
+                      <div class="layui-input-inline">
+                        <input
+                          type="text"
+                          name="code"
+                          v-model="code"
+                          placeholder="请输入验证码"
+                          autocomplete="off"
+                          class="layui-input"
+                        />
+                      </div>
+                      <div class>
+                        <span
+                          class="svg"
+                          style="color: #c00;"
+                          @click="_getCaptcha()"
+                          v-html="svg"
+                        ></span>
+                      </div>
                     </div>
-                    <div class>
-                      <span
-                        class="svg"
-                        style="color: #c00;"
-                        @click="_getCaptcha()"
-                        v-html="svg"
-                      ></span>
+                    <div class="layui-form-mid">
+                      <span style="color: #c00;">{{ errors[0] }}</span>
                     </div>
-                  </div>
-                  <div class="layui-form-mid">
-                    <span style="color: #c00;">{{ errors[0] }}</span>
-                  </div>
-                </validation-provider>
-              </div>
+                  </validation-provider>
+                </div>
 
-              <!-- 提交评论按钮 -->
-              <div class="layui-form-item">
-                <button
-                  class="layui-btn"
-                  type="button"
-                  @click="submit"
-                >提交回复</button>
-              </div>
+                <!-- 提交评论按钮 -->
+                <div class="layui-form-item">
+                  <button
+                    class="layui-btn"
+                    type="button"
+                    @click="submit"
+                  >提交回复</button>
+                </div>
+              </validation-observer>
             </form>
           </div>
         </div>
@@ -328,11 +336,13 @@ export default {
     this.getCommentList()
   },
   methods: {
-    handleChangePage (page) {
-      this.currPage = page
+    handleChangePage (options) {
+      this.currPage = options.page
+      if (options.flag) this.getCommentList()
     },
     handleChangePageSize (pageSize) {
       this.pageSize = pageSize
+      this.getCommentList()
     },
     getPostDetail () {
       getDetail(this.tid).then(res => {
@@ -347,7 +357,11 @@ export default {
       })
     },
     getCommentList () {
-      getComments(this.tid).then(res => {
+      getComments({
+        page: this.currPage - 1,
+        pageSize: this.pageSize,
+        tid: this.tid
+      }).then(res => {
         if (res.code === 200) {
           this.comments = res.data
           this.total = res.total
@@ -360,8 +374,8 @@ export default {
       }
     },
     async submit () {
-      const { valid } = await this.$refs.codefield.validate()
-      if (!valid) {
+      const isValid = await this.$refs.observer.validate()
+      if (!isValid) {
         this.$pop('请先输入验证码', 'shake')
         return
       }
@@ -383,9 +397,24 @@ export default {
         sid: this.$store.state.sid,
         tid: this.tid
       })
-      console.log(res)
       if (res.code === 200) {
         this.$pop('发表评论成功')
+        const user = this.$store.state.userInfo
+        const cuid = {
+          _id: user._id,
+          name: user.name,
+          pic: user.pic,
+          isVip: user.isVip
+        }
+        res.data.cuid = cuid
+        this.comments.push(res.data)
+        this.total = this.comments.length + 1
+        this.code = ''
+        this.content = ''
+        // requestAnimationFrame(() => {
+        //   this.$refs.observer && this.refs.observer.reset()
+        // })
+        this._getCaptcha()
       } else if (res.code === 401) {
         this.$pop(res.msg)
       }

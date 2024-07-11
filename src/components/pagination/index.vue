@@ -192,7 +192,10 @@ export default {
         if (oldPage > this.total) {
           oldPage = this.total
         }
-        this.$emit('changeCurrentPage', Math.ceil(oldPage / this.options[index]))
+        this.$emit('changeCurrentPage', {
+          page: Math.ceil(oldPage / this.options[index]),
+          flag: false
+        })
         this.$emit('changePageSize', this.options[index])
         this.optIndex = index
         this.initPages(this.options[index])
@@ -204,23 +207,38 @@ export default {
     },
     home () {
       if (this.currPage === 1) return
-      this.$emit('changeCurrentPage', 1)
+      this.$emit('changeCurrentPage', {
+        page: 1,
+        flag: true
+      })
     },
     prev () {
       if (this.currPage === 1) return
-      this.$emit('changeCurrentPage', this.currPage - 1)
+      this.$emit('changeCurrentPage', {
+        page: this.currPage - 1,
+        flag: true
+      })
     },
     next () {
       if (this.currPage === this.pages.length) return
-      this.$emit('changeCurrentPage', this.currPage + 1)
+      this.$emit('changeCurrentPage', {
+        page: this.currPage + 1,
+        flag: true
+      })
     },
     end () {
       if (this.currPage === this.pages.length) return
-      this.$emit('changeCurrentPage', this.pages.length)
+      this.$emit('changeCurrentPage', {
+        page: this.pages.length,
+        flag: true
+      })
     },
     change (page) {
       if (page === this.currPage) return
-      this.$emit('changeCurrentPage', page)
+      this.$emit('changeCurrentPage', {
+        page,
+        flag: true
+      })
     }
   },
   watch: {
