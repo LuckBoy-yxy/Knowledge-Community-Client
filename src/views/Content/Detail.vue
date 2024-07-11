@@ -227,7 +227,7 @@
           <!-- 书写评论区域 -->
           <div class="layui-form layui-form-pane">
             <form>
-              <Editor />
+              <Editor @changeContent="handleChangeContent" />
 
               <!-- 验证码 -->
               <div class="layui-form-item">
@@ -250,7 +250,12 @@
                       />
                     </div>
                     <div class>
-                      <span class="svg" style="color: #c00;" @click="_getCaptcha()" v-html="svg"></span>
+                      <span
+                        class="svg"
+                        style="color: #c00;"
+                        @click="_getCaptcha()"
+                        v-html="svg"
+                      ></span>
                     </div>
                   </div>
                   <div class="layui-form-mid">
@@ -261,7 +266,11 @@
 
               <!-- 提交评论按钮 -->
               <div class="layui-form-item">
-                <button class="layui-btn" type="button">提交回复</button>
+                <button
+                  class="layui-btn"
+                  type="button"
+                  @click="submit"
+                >提交回复</button>
               </div>
             </form>
           </div>
@@ -289,7 +298,7 @@ import CodeMix from '@/mixins/code'
 import { escapeHtml } from '@/utils/escapeHtml'
 
 import { getDetail } from '@/api/content'
-import { getComments } from '@/api/comments'
+import { getComments, addComment } from '@/api/comments'
 
 export default {
   name: 'DetailCom',
@@ -309,7 +318,8 @@ export default {
       total: 0,
       pageSize: 10,
       page: {},
-      comments: []
+      comments: [],
+      content: ''
     }
   },
   mounted () {
@@ -343,6 +353,42 @@ export default {
           this.total = res.total
         }
       })
+    },
+    handleChangeContent (contentValue) {
+      if (contentValue.trim()) {
+        this.content = contentValue
+      }
+    },
+    async submit () {
+      const { valid } = await this.$refs.codefield.validate()
+      if (!valid) {
+        this.$pop('请先输入验证码', 'shake')
+        return
+      }
+
+      const isLogin = this.$store.state.userInfo.token
+      if (!isLogin) {
+        this.$pop('请先进行登录', 'shake')
+        return
+      }
+
+      if (!this.content.trim()) {
+        this.$pop('请输入评论内容', 'shake')
+        return
+      }
+
+      const res = await addComment({
+        content: this.content,
+        code: this.code,
+        sid: this.$store.state.sid,
+        tid: this.tid
+      })
+      console.log(res)
+      if (res.code === 200) {
+        this.$pop('发表评论成功')
+      } else if (res.code === 401) {
+        this.$pop(res.msg)
+      }
     }
   }
 }
