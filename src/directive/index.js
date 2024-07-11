@@ -4,6 +4,9 @@ export default {
   richText: {
     bind (el, binding, vnode) {
       el.innerHTML = escapeHtml(binding.value)
+    },
+    componentUpdated (el, binding, vnode) {
+      el.innerHTML = escapeHtml(binding.value)
     }
   }
 }

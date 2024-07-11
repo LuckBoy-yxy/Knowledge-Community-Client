@@ -318,7 +318,7 @@ import { escapeHtml } from '@/utils/escapeHtml'
 import { scollToElem } from '@/utils/common'
 
 import { getDetail } from '@/api/content'
-import { getComments, addComment } from '@/api/comments'
+import { getComments, addComment, updateComment } from '@/api/comments'
 
 export default {
   name: 'DetailCom',
@@ -339,7 +339,9 @@ export default {
       pageSize: 10,
       page: {},
       comments: [],
-      content: ''
+      content: '',
+      cid: '',
+      currentComment: {}
     }
   },
   mounted () {
@@ -392,50 +394,76 @@ export default {
         this.$pop('请先输入验证码', 'shake')
         return
       }
-
       const isLogin = this.$store.state.userInfo.token
       if (!isLogin) {
         this.$pop('请先进行登录', 'shake')
         return
       }
-
       if (!this.content.trim()) {
         this.$pop('请输入评论内容', 'shake')
         return
       }
-
-      const res = await addComment({
-        content: this.content,
-        code: this.code,
-        sid: this.$store.state.sid,
-        tid: this.tid
-      })
-      if (res.code === 200) {
-        this.$pop('发表评论成功')
-        const user = this.$store.state.userInfo
-        const cuid = {
-          _id: user._id,
-          name: user.name,
-          pic: user.pic,
-          isVip: user.isVip
-        }
-        res.data.cuid = cuid
-        this.comments.push(res.data)
-        this.total = this.comments.length + 1
-        this.code = ''
-        this.content = ''
-        // requestAnimationFrame(() => {
-        //   this.$refs.observer && this.refs.observer.reset()
-        // })
-        this._getCaptcha()
-      } else if (res.code === 401) {
-        this.$pop(res.msg)
+      if (this.$store.state.userInfo.status !== '0') {
+        this.$pop('当前用户已经被禁言, 请联系管理员')
       }
+
+      let res
+      const user = this.$store.state.userInfo
+      const cuid = {
+        _id: user._id,
+        name: user.name,
+        pic: user.pic,
+        isVip: user.isVip
+      }
+      if (typeof this.cid !== 'undefined' && this.cid !== '') {
+        if (this.currentComment.content === this.content) {
+          this.$pop('未检测到内容变化')
+          return
+        }
+
+        updateComment({
+          cid: this.cid,
+          content: this.content,
+          code: this.code,
+          sid: this.$store.state.sid
+        }).then(res => {
+          if (res.code === 200) {
+            this.$pop('更新评论成功')
+            res.data.cuid = cuid
+            this.comments.splice(this.comments.indexOf(this.currentComment), 1, res.data)
+          }
+        })
+      } else {
+        res = await addComment({
+          content: this.content,
+          code: this.code,
+          sid: this.$store.state.sid,
+          tid: this.tid
+        })
+        if (res.code === 200) {
+          this.$pop('发表评论成功')
+          res.data.cuid = cuid
+          this.comments.push(res.data)
+          this.total = this.comments.length + 1
+        }
+      }
+      if (res.code === 401) {
+        this.$pop(res.msg)
+        return
+      }
+      this.code = ''
+      this.content = ''
+      // requestAnimationFrame(() => {
+      //   this.$refs.observer && this.refs.observer.reset()
+      // })
+      this._getCaptcha()
     },
     edit (comment) {
       this.content = comment.content
       scollToElem('.layui-input-block', 1000, -70)
       document.getElementById('editContent').focus()
+      this.cid = comment._id
+      this.currentComment = comment
     },
     setBest (comment) {
       this.$confirm('确定将此评论采纳为最佳答案吗', () => {}, () => {

@@ -10,3 +10,8 @@ export const getComments = params => {
 export const addComment = data => {
   return request.post('/comments/reply', data)
 }
+
+// 更新评论信息接口
+export const updateComment = data => {
+  return request.post('/comments/update', data)
+}
