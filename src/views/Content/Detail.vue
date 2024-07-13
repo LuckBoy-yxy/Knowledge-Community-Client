@@ -200,15 +200,18 @@
                 <span
                   class="jieda-zan"
                   type="zan"
-                  :class="[item.hands ? 'zanok' : '']"
+                  :class="[item.handed === '1' ? 'zanok' : '']"
+                  @click="handleClickHand(item)"
                 >
                   <i class="iconfont icon-zan"></i>
                   <em>{{ item.hands }}</em>
                 </span>
+
                 <span type="reply">
                   <i class="iconfont icon-svgmoban53"></i>
                   回复
                 </span>
+
                 <div class="jieda-admin">
                   <span
                     v-if="page.isEnd === '0' && item.cuid?._id === user._id"
@@ -318,7 +321,13 @@ import { escapeHtml } from '@/utils/escapeHtml'
 import { scollToElem } from '@/utils/common'
 
 import { getDetail } from '@/api/content'
-import { getComments, addComment, updateComment, setBestComment } from '@/api/comments'
+import {
+  getComments,
+  addComment,
+  updateComment,
+  setBestComment,
+  setHands
+} from '@/api/comments'
 
 export default {
   name: 'DetailCom',
@@ -479,6 +488,17 @@ export default {
             this.$pop(res.msg)
           }
         })
+      })
+    },
+    handleClickHand (comment) {
+      setHands({ cid: comment._id }).then(res => {
+        if (res.code === 200) {
+          comment.handed = '1'
+          comment.hands++
+          this.$pop('点赞成功')
+        } else {
+          this.$pop(res.msg, 'shake')
+        }
       })
     }
   },
