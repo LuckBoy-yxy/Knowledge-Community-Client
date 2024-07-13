@@ -217,7 +217,7 @@
                   <!-- <span>删除</span> -->
                   <span
                     class="jieda-accept"
-                    v-if="page.user?._id === user._id"
+                    v-if="page.user?._id === user._id && page.isEnd === '0'"
                     @click="setBest(item)"
                   >采纳</span>
                 </div>
@@ -475,6 +475,8 @@ export default {
             comment.isBest = '1'
             this.page.isEnd = '1'
             this.$pop('采纳成功')
+          } else {
+            this.$pop(res.msg)
           }
         })
       })
