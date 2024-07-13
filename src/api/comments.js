@@ -15,3 +15,8 @@ export const addComment = data => {
 export const updateComment = data => {
   return request.post('/comments/update', data)
 }
+
+// 采纳评论接口
+export const setBestComment = params => {
+  return request.get('/comments/accept?' + qs.stringify(params))
+}

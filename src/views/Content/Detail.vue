@@ -318,7 +318,7 @@ import { escapeHtml } from '@/utils/escapeHtml'
 import { scollToElem } from '@/utils/common'
 
 import { getDetail } from '@/api/content'
-import { getComments, addComment, updateComment } from '@/api/comments'
+import { getComments, addComment, updateComment, setBestComment } from '@/api/comments'
 
 export default {
   name: 'DetailCom',
@@ -467,9 +467,14 @@ export default {
     },
     setBest (comment) {
       this.$confirm('确定将此评论采纳为最佳答案吗', () => {}, () => {
-        this.comments.forEach(item => {
-          if (item._id === comment._id) {
-            item.isBest = '1'
+        setBestComment({
+          tid: this.tid,
+          cid: comment._id
+        }).then(res => {
+          if (res.code === 200) {
+            comment.isBest = '1'
+            this.page.isEnd = '1'
+            this.$pop('采纳成功')
           }
         })
       })
