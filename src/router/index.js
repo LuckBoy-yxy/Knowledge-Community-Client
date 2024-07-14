@@ -29,6 +29,7 @@ const Confirm = () => import(/* webpackChunkName: 'confirm' */ '../views/Confirm
 const Reset = () => import(/* webpackChunkName: 'reset' */ '../views/Reset')
 const Add = () => import(/* webpackChunkName: 'add' */ '../views/Content/Add.vue')
 const Detail = () => import(/* webpackChunkName: 'detail' */ '../views/Content/Detail.vue')
+const Edit = () => import(/* webpackChunkName: 'edit' */ '../views/Content/Edit.vue')
 
 Vue.use(VueRouter)
 
@@ -176,6 +177,15 @@ const routes = [
     name: 'detail',
     props: true,
     component: Detail
+  },
+  {
+    path: '/edit/:tid',
+    name: 'edit',
+    props: true,
+    meta: {
+      requireAuth: true
+    },
+    component: Edit
   },
   {
     path: '/404',

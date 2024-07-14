@@ -132,7 +132,11 @@
 
           <!-- 编辑和收藏按钮 -->
           <div class="layui-btn-container fly-detail-admin pt1">
-            <a href class="layui-btn layui-btn-sm jie-admin">编辑</a>
+            <RouterLink
+             class="layui-btn layui-btn-sm jie-admin"
+             :to="{ name: 'edit', params: { tid: tid, page } }"
+             v-if="page.isEnd === '0'"
+            >编辑</RouterLink>
             <a href class="layui-btn layui-btn-sm jie-admin-collect">收藏</a>
           </div>
 

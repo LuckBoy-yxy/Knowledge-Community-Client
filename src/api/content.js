@@ -43,3 +43,8 @@ export const addPost = postData => {
 export const getDetail = tid => {
   return request.get('/public/content/detail?tid=' + tid)
 }
+
+// 编辑帖子详情接口
+export const updatePost = data => {
+  return request.post('/content/update', data)
+}
