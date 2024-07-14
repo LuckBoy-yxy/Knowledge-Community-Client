@@ -196,7 +196,12 @@ export default {
           this.$pop(res.msg + ', 2秒钟之后跳转')
           setTimeout(() => {
             localStorage.setItem('editData', '')
-            router.push('/')
+            router.push({
+              name: 'detail',
+              params: {
+                tid: this.tid
+              }
+            })
           }, 2000)
         } else {
           this.$pop(res.msg)

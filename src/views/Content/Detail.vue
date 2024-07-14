@@ -237,6 +237,7 @@
 
           <!-- 分页组件 -->
           <pagination
+            v-if="comments.length"
             showType="icon"
             :hasSelect="true"
             :total="total"
