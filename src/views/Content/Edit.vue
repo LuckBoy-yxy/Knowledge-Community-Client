@@ -120,7 +120,7 @@ import Editor from '@/components/contents/Editor.vue'
 import codeMixin from '@/mixins/code.js'
 
 import { updatePost } from '@/api/content'
-import router from '@/router'
+
 export default {
   name: 'EditCom',
   mixins: [codeMixin],
@@ -174,11 +174,16 @@ export default {
           favIndex: this.favIndex,
           content: this.content
         }
-        localStorage.setItem('editData', JSON.stringify(saveData))
+        let newObj = { ...saveData }
+        const editData = localStorage.getItem('editData')
+        if (editData) {
+          const editObj = JSON.parse(editData)
+          newObj = { ...saveData, ...editObj }
+        }
+        localStorage.setItem('editData', JSON.stringify(newObj))
       }
     },
     async submit () {
-      if (!this.cataIndex) return this.$pop('请选择帖子专栏', 'shake')
       if (!this.title.trim()) return this.$pop('请输入帖子标题', 'shake')
       if (!this.content.trim()) return this.$pop('请输入帖子内容', 'shake')
 
@@ -193,10 +198,11 @@ export default {
         tid: this.tid
       }).then(res => {
         if (res.code === 200) {
+          localStorage.setItem('editData', '')
           this.$pop(res.msg + ', 2秒钟之后跳转')
           setTimeout(() => {
             localStorage.setItem('editData', '')
-            router.push({
+            this.$router.push({
               name: 'detail',
               params: {
                 tid: this.tid
@@ -212,12 +218,12 @@ export default {
   mounted () {
     if (!this.page) {
       if (!localStorage.getItem('editData')) return
-      const saveData = JSON.parse(localStorage.getItem('editData'))
+      const saveData = localStorage.getItem('editData')
       if (saveData) {
         this.$confirm('是否加载先前未完成的内容', () => {
           localStorage.setItem('editData', '')
         }, () => {
-          const { title, content, favIndex, cataIndex } = saveData
+          const { title, content, favIndex, cataIndex } = JSON.parse(saveData)
           this.title = title
           this.content = content
           this.favIndex = favIndex
@@ -231,6 +237,9 @@ export default {
       this.favIndex = this.favList.indexOf(+this.page.fav)
       localStorage.setItem('editData', JSON.stringify(this.page))
     }
+  },
+  beforeDestroy () {
+    localStorage.setItem('editData', '')
   }
 }
 </script>

@@ -185,7 +185,24 @@ const routes = [
     meta: {
       requireAuth: true
     },
-    component: Edit
+    component: Edit,
+    beforeEnter (to, from, next) {
+      if (from.name === 'detail' && to.params.page?.isEnd === '0') {
+        next()
+      } else {
+        const editData = localStorage.getItem('editData')
+        if (editData) {
+          const editObj = JSON.parse(editData)
+          if (editObj.isEnd === '0') {
+            next()
+          } else {
+            next('/')
+          }
+        } else {
+          next('/')
+        }
+      }
+    }
   },
   {
     path: '/404',

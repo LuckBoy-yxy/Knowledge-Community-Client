@@ -527,6 +527,14 @@ export default {
     user () {
       return this.$store.state.userInfo
     }
+  },
+  watch: {
+    tid (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.getPostDetail()
+        this.getCommentList()
+      }
+    }
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <dl class="fly-panel fly-list-one">
       <dt class="fly-panel-title">本周热议</dt>
       <dd v-for="(item, index) in lists" :key="index + item.title">
-        <a href="#">{{ item.title }}</a>
+        <RouterLink :to="`/detail/${item._id}`">{{ item.title }}</RouterLink>
         <span>
           <i class="iconfont icon-pinglun1"></i> {{ item.answer }}
         </span>
