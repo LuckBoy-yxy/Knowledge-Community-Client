@@ -207,7 +207,7 @@
                   <em>{{ item.hands }}</em>
                 </span>
 
-                <span type="reply">
+                <span type="reply" @click="reply(item)">
                   <i class="iconfont icon-svgmoban53"></i>
                   回复
                 </span>
@@ -500,6 +500,22 @@ export default {
           this.$pop(res.msg, 'shake')
         }
       })
+    },
+    reply (comment) {
+      const reg = /^@[\S]+/g
+      if (this.content.trim()) {
+        if (reg.test(this.content)) {
+          this.content = this.content.replace(reg, `@${comment.cuid.name}`)
+        } else {
+          if (this.content.trim() !== '') {
+            this.content = `@${comment.cuid.name} ${this.content}`
+          }
+        }
+      } else {
+        this.content = '@' + comment.cuid.name + ' '
+      }
+      scollToElem('.layui-input-block', 1000, -65)
+      document.getElementById('editContent').focus()
     }
   },
   computed: {
