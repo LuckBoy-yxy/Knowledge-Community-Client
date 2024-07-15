@@ -13,8 +13,12 @@
             </li>
             <template v-if="userInfo.token">
               <li class="layui-hide-xs"><span class="line"></span></li>
-              <li class="layui-hide-xs"><a href="#">我发表的帖</a></li>
-              <li class="layui-hide-xs"><a href="#">我收藏的帖</a></li>
+              <li class="layui-hide-xs">
+                <RouterLink to="/center/posts">我发表的帖</RouterLink>
+              </li>
+              <li class="layui-hide-xs">
+                <RouterLink to="/center/posts/mycollection">我收藏的帖</RouterLink>
+              </li>
             </template>
           </ul>
         </div>
