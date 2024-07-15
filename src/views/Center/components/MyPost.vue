@@ -42,9 +42,21 @@
             v-for="item in lists"
             :key="item._id"
           >
-            <td class="text-center">{{ item.title }}</td>
+            <td class="text-center">
+              <RouterLink
+                class="link"
+                :to="{
+                  name: 'detail',
+                  params: { tid: item._id }
+                }"
+              >{{ item.title }}</RouterLink>
+            </td>
             <td>{{ item.status === '0' ? '打开' : '关闭' }}</td>
-            <td>{{ item.isEnd === '0' ? '未结' : '已结' }}</td>
+            <td
+              :class="{ success: item.isEnd === '1' }"
+            >
+              {{ item.isEnd === '0' ? '未结' : '已结' }}
+            </td>
             <td>{{ item.created | momentDate }}</td>
             <td>{{ item.reads }} 读/{{ item.answer }} 答</td>
             <td>
@@ -154,5 +166,11 @@ export default {
 }
 .min-cell {
   min-width: 80px;
+}
+.link {
+  color: rgb(95, 95, 238);
+}
+.success {
+  color: #5fb878;
 }
 </style>
