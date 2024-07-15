@@ -48,10 +48,11 @@
             <td>{{ item.created | momentDate }}</td>
             <td>{{ item.reads }} 读/{{ item.answer }} 答</td>
             <td>
-              <RouterLink
+              <div
                 class="layui-btn layui-btn-xs"
-                :to="{ name: 'detail', params: { tid: item._id } }"
-              >编辑</RouterLink>
+                :class="[ item.isEnd === '1' ? 'layui-btn-disabled' : '' ]"
+                @click="edit(item)"
+              >编辑</div>
               <div
                 class="layui-btn layui-btn-xs layui-btn-danger"
                 @click="del(item)"
@@ -78,7 +79,7 @@
 <script>
 import Pagination from '@/components/pagination'
 
-import { getPostList } from '@/api/user'
+import { getPostListByUid, delPostByUid } from '@/api/user'
 
 export default {
   name: 'MyPost',
@@ -98,7 +99,7 @@ export default {
   },
   methods: {
     _getPostList () {
-      getPostList({
+      getPostListByUid({
         page: this.currPage,
         pageSize: this.pageSize
       }).then(res => {
@@ -113,6 +114,35 @@ export default {
         this.currPage = page
         this._getPostList()
       }
+    },
+    edit (item) {
+      if (item.isEnd === '1') {
+        return this.$pop('当前帖子已结帖, 无法编辑')
+      }
+      this.$router.push({
+        name: 'edit',
+        params: { tid: item._id, page: item }
+      })
+    },
+    del (item) {
+      if (item.isEnd !== '0') {
+        return this.$pop('当前帖子已结帖, 无法删除')
+      }
+
+      this.$confirm('确定要删除这篇帖子吗', () => {
+        console.log('取消')
+      }, () => {
+        delPostByUid({
+          tid: item._id
+        }).then(res => {
+          if (res.code === 200) {
+            this.lists.splice(this.lists.indexOf(item), 1)
+            this.$pop('删除成功')
+          } else {
+            this.$pop(res.msg)
+          }
+        })
+      })
     }
   }
 }

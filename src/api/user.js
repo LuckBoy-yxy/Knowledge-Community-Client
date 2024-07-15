@@ -41,6 +41,11 @@ export const getCollectList = params => {
 }
 
 // 获取个人中心中文章列表接口
-export const getPostList = params => {
+export const getPostListByUid = params => {
   return axios.get('/user/post?' + qs.stringify(params))
+}
+
+// 删除个人中帖子接口
+export const delPostByUid = params => {
+  return axios.get('/user/del-post?' + qs.stringify(params))
 }

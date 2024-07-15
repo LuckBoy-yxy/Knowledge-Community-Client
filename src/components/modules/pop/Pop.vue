@@ -65,6 +65,7 @@ export default {
 }
 
 .tips {
+  z-index: 2000;
   position: fixed;
   top: 50%;
   left: 50%;

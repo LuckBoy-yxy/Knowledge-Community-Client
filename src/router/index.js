@@ -187,7 +187,7 @@ const routes = [
     },
     component: Edit,
     beforeEnter (to, from, next) {
-      if (from.name === 'detail' && to.params.page?.isEnd === '0') {
+      if (['detail', 'mypost'].indexOf(from.name) !== -1 && to.params.page?.isEnd === '0') {
         next()
       } else {
         const editData = localStorage.getItem('editData')
