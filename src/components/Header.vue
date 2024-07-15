@@ -44,9 +44,9 @@
             @mouseenter="show"
             @mouseleave="hide"
           >
-            <a
+            <RouterLink
               class="fly-nav-avatar"
-              href="javascript:;"
+              to="/center"
             >
               <cite class="layui-hide-xs">{{ userInfo.name }} </cite>
               <i class="iconfont icon-renzheng layui-hide-xs" :title="userInfo.name"></i>
@@ -54,16 +54,29 @@
                 class="layui-badge fly-badge-vip layui-hide-xs"
                 v-show="userInfo.isVip !== '0'">VIP{{ userInfo.isVip }}</i>
               <img :src="userInfo.pic">
-            </a>
+            </RouterLink>
 
             <!-- 下拉菜单 -->
             <dl
               class="layui-nav-child layui-anim layui-anim-upbit"
               :class="{ 'layui-show': isShow }"
             >
-              <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
-              <dd><a href="user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
-              <dd><a href="user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+              <dd>
+                <RouterLink to="/center/settings">
+                  <i class="layui-icon">&#xe620;</i>基本设置
+                </RouterLink>
+              </dd>
+              <dd>
+                <RouterLink to="/center/messages">
+                  <i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息
+                </RouterLink>
+              </dd>
+              <dd>
+                <RouterLink to="/user/111">
+                  <i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页
+                </RouterLink>
+              </dd>
+
               <hr style="margin: 5px 0;">
               <dd>
                 <a
