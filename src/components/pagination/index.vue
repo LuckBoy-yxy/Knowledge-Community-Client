@@ -3,8 +3,8 @@
     class="d-flex"
     :class="{
       'flex-center': align === 'center',
-      'flex-left': align === 'left',
-      'flex-right': align === 'right'
+      'flex-start': align === 'left',
+      'flex-end': align === 'right'
     }"
   >
     <div class="layui-box layui-laypage layui-laypage-default">

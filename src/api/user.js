@@ -39,3 +39,8 @@ export const addCollect = params => {
 export const getCollectList = params => {
   return axios.get('/user/collect', qs.stringify(params))
 }
+
+// 获取个人中心中文章列表接口
+export const getPostList = params => {
+  return axios.get('/user/post?' + qs.stringify(params))
+}
