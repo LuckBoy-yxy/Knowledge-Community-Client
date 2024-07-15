@@ -49,3 +49,8 @@ export const getPostListByUid = params => {
 export const delPostByUid = params => {
   return axios.get('/user/del-post?' + qs.stringify(params))
 }
+
+// 获取个人中心收藏帖子接口
+export const getCollect = params => {
+  return axios.get('/user/collect?' + qs.stringify(params))
+}
