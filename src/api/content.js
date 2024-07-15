@@ -1,5 +1,6 @@
 import qs from 'qs'
 import request from '@/utils/request'
+import store from '@/store'
 
 /**
 * @description: 获取文章列表
@@ -41,7 +42,16 @@ export const addPost = postData => {
 
 // 获取帖子详情数据接口
 export const getDetail = tid => {
-  return request.get('/public/content/detail?tid=' + tid)
+  let headers = {}
+  const token = store.state.userInfo.token
+  if (token) {
+    headers = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  }
+  return request.get('/public/content/detail?tid=' + tid, headers)
 }
 
 // 编辑帖子详情接口

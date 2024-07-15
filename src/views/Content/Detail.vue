@@ -137,7 +137,11 @@
              :to="{ name: 'edit', params: { tid: tid, page } }"
              v-if="page.isEnd === '0'"
             >编辑</RouterLink>
-            <a href class="layui-btn layui-btn-sm jie-admin-collect">收藏</a>
+            <a
+              class="layui-btn layui-btn-sm jie-admin-collect"
+              :class="{ 'layui-btn-primary': page.isFav }"
+              @click.prevent="setCollect()"
+            >{{ page.isFav ? '取消收藏' : '收藏' }}</a>
           </div>
 
           <!-- 当前帖子内容 -->
@@ -333,6 +337,7 @@ import {
   setBestComment,
   setHands
 } from '@/api/comments'
+import { addCollect } from '@/api/user'
 
 export default {
   name: 'DetailCom',
@@ -521,6 +526,23 @@ export default {
       }
       scollToElem('.layui-input-block', 1000, -65)
       document.getElementById('editContent').focus()
+    },
+    setCollect () {
+      const { token } = this.$store.state.userInfo
+      if (!token) {
+        return this.$pop('请先登录', 'shake')
+      }
+      addCollect({
+        tid: this.tid,
+        title: this.page.title,
+        isFav: this.page.isFav ? 1 : 0
+      }).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.page.isFav = !this.page.isFav
+          this.$pop(this.page.isFav ? '收藏成功' : '取消收藏成功')
+        }
+      })
     }
   },
   computed: {

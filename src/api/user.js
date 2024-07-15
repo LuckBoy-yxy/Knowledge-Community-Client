@@ -29,3 +29,13 @@ export const updateUserName = data => {
 export const changePasswd = data => {
   return axios.post('/user/change-password', data)
 }
+
+// 收藏或取消收藏帖子接口
+export const addCollect = params => {
+  return axios.get('/user/set-collect?' + qs.stringify(params))
+}
+
+// 获取收藏列表数据
+export const getCollectList = params => {
+  return axios.get('/user/collect', qs.stringify(params))
+}
