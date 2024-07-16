@@ -72,8 +72,11 @@
                 </RouterLink>
               </dd>
               <dd>
-                <RouterLink to="/user/111">
-                  <i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页
+                <RouterLink :to="`/user/${userInfo._id}`">
+                  <i
+                    class="layui-icon"
+                    style="margin-left: 2px; font-size: 22px;"
+                  >&#xe68e;</i>我的主页
                 </RouterLink>
               </dd>
 

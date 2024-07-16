@@ -163,20 +163,31 @@
               :key="item._id"
             >
               <div class="detail-about detail-about-reply">
-                <a class="fly-avatar" href>
+                <RouterLink
+                  class="fly-avatar"
+                  to="/center"
+                >
                   <img
                     :src="item.cuid?.pic || '@/assets/img/bear-200-200.jpg'"
                   />
-                </a>
+                </RouterLink>
                 <div class="fly-detail-user">
-                  <a href class="fly-link">
+                  <routerLink
+                    class="fly-link"
+                    :to="{
+                      name: 'home',
+                      params: {
+                        uid: item.cuid?._id
+                      }
+                    }"
+                  >
                     <cite>{{ item.cuid?.name || 'test name' }} </cite>
                     <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>&nbsp;
                     <i
                       class="layui-badge fly-badge-vip"
                       v-if="item.cuid?.isVip && item.cuid.isVip !== '0'"
                     >VIP{{ item.cuid.isVip }}</i>
-                  </a>
+                  </routerLink>
 
                   <span v-if="index === 0">(楼主)</span>
                   <!--

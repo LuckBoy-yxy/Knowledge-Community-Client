@@ -59,3 +59,13 @@ export const getCollect = params => {
 export const getUserInfo = ({ uid }) => {
   return axios.get(`/public/base-user-info?uid=${uid}`)
 }
+
+// 在不登录的情况下, 获取其他发帖人个人中心中, 最近 20 条的发帖记录接口
+export const getPublicPostByUid = params => {
+  return axios.get('/public/latest-post?' + qs.stringify(params))
+}
+
+// 在不登录的情况下, 获取其他发帖人个人中心中, 最近 20 条评论记录接口
+export const getCommentList = params => {
+  return axios.get('/public/latest-comment?' + qs.stringify(params))
+}

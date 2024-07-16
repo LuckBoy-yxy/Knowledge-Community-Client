@@ -3,7 +3,7 @@
     <ul class="layui-nav layui-nav-tree" lay-filter="test">
       <li class="layui-nav-item" v-for="(item,index) in lists" :key="'center' + index">
         <RouterLink
-          :to="item.flag ? '/user/111' : { name: item.path }"
+          :to="item.flag ? `/user/${$store.state.userInfo._id}` : { name: item.path }"
           :active-class="item.activeClass"
         >
           <i class="layui-icon" :class="item.icon"></i>
