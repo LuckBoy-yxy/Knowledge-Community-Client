@@ -54,3 +54,8 @@ export const delPostByUid = params => {
 export const getCollect = params => {
   return axios.get('/user/collect?' + qs.stringify(params))
 }
+
+// 获取个人中心用户基本信息接口
+export const getUserInfo = ({ uid }) => {
+  return axios.get(`/public/base-user-info?uid=${uid}`)
+}

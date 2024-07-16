@@ -175,6 +175,16 @@ export default {
     },
     token () {
       return this.$store.state.userInfo.token
+    },
+    userInfo () {
+      return this.$store.state.userInfo
+    }
+  },
+  watch: {
+    userInfo (newVal, oldVal) {
+      if (newVal.isSign) {
+        this.isSign = true
+      }
     }
   }
 }
