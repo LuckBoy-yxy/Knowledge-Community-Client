@@ -89,6 +89,19 @@
                 >退出</a></dd>
             </dl>
           </li>
+
+          <div class="fly-nav-msg">0</div>
+          <Transition name="fade">
+            <div
+              class="layui-layer-tips"
+              v-show="hasMsg"
+            >
+              <div class="layui-layer-content">
+                您有一条未读消息
+                <i class="layui-layer-TipsG layui-layer-TipsB"></i>
+              </div>
+            </div>
+          </Transition>
         </template>
       </ul>
     </div>
@@ -103,8 +116,12 @@ export default {
   name: 'HeaderCom',
   data () {
     return {
-      isShow: false
+      isShow: false,
+      hasMsg: false
     }
+  },
+  mounted () {
+    window.vue = this
   },
   computed: {
     userInfo () {
@@ -138,5 +155,12 @@ export default {
   left: -15px;
   top: -10px;
   margin-left: 15px;
+}
+.layui-layer-tips {
+  position: fixed;
+  top: 55px;
+  right: 130px;
+  z-index: 2000;
+  white-space: nowrap;
 }
 </style>

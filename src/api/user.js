@@ -69,3 +69,8 @@ export const getPublicPostByUid = params => {
 export const getCommentList = params => {
   return axios.get('/public/latest-comment?' + qs.stringify(params))
 }
+
+// 获取个人中心中, 我的消息页面的消息列表数据
+export const getMsg = params => {
+  return axios.get('/user/get-msg?' + qs.stringify(params))
+}

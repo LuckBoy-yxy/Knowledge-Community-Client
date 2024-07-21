@@ -3,8 +3,14 @@
     <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
       <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
       <div id="LAY_minemsg" style="margin-top: 10px;">
-        <!--<div class="fly-none">您暂时没有最新消息</div>-->
-        <ul class="mine-msg">
+        <div
+          v-if="lists.length"
+          class="fly-none"
+        >您暂时没有最新消息</div>
+        <ul
+          v-else
+          class="mine-msg"
+        >
           <li data-id="123">
             <blockquote class="layui-elem-quote">
               <a href="/jump?username=Absolutely" target="_blank">
@@ -33,14 +39,61 @@
             </p>
           </li>
         </ul>
+
+        <Pagination
+          v-if="lists.length"
+          :currPage="page"
+          :pageSize="pageSize"
+          :total="total"
+          :showEnd="false"
+          @changeCurrentPage="handleChangePage"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Pagination from '@/components/pagination'
+
+import { getMsg } from '@/api/user'
+
 export default {
-  name: 'MessageCom'
+  name: 'MessageCom',
+  components: {
+    Pagination
+  },
+  data () {
+    return {
+      lists: [],
+      page: 1,
+      pageSize: 10,
+      total: 0
+    }
+  },
+  mounted () {
+    this.getMsgAll()
+  },
+  methods: {
+    getMsgAll () {
+      getMsg({
+        page: this.page,
+        pageSize: this.pageSize
+      }).then(res => {
+        console.log(res)
+        if (res.code === 200) {
+          this.lists = res.data
+          this.total = res.total
+        }
+      })
+    },
+    handleChangePage (page, flag) {
+      if (flag) {
+        this.page = page
+        this.getMsgAll()
+      }
+    }
+  }
 }
 </script>
 
