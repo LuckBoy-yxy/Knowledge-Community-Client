@@ -4,34 +4,31 @@
       <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
       <div id="LAY_minemsg" style="margin-top: 10px;">
         <div
-          v-if="lists.length"
+          v-if="!lists.length"
           class="fly-none"
         >您暂时没有最新消息</div>
         <ul
           v-else
           class="mine-msg"
         >
-          <li data-id="123">
+          <li
+            v-for="item in lists"
+            :key="item._id"
+          >
             <blockquote class="layui-elem-quote">
-              <a href="/jump?username=Absolutely" target="_blank">
-                <cite>Absolutely</cite>
-              </a>回答了您的求解
-              <a target="_blank" href="/jie/8153.html/page/0/#item-1489505778669">
-                <cite>layui后台框架</cite>
-              </a>
+              <RouterLink
+                :to="item.cuid ? `/user/${item.cuid._id}` : '/404'"
+              >
+                <cite>{{ item.cuid?.name || 'testUser' }}</cite>
+              </RouterLink>回答了您的求解
+              <RouterLink
+                :to="item.tid ? `/detail/${item.tid._id}` : '/404'"
+              >
+                <cite>{{ item.tid?.title || '当前帖子已被删除' }}</cite>
+              </RouterLink>
             </blockquote>
             <p>
-              <span>1小时前</span>
-              <a
-                href="javascript:;"
-                class="layui-btn layui-btn-small layui-btn-danger fly-delete"
-              >删除</a>
-            </p>
-          </li>
-          <li data-id="123">
-            <blockquote class="layui-elem-quote">系统消息：欢迎使用 layui</blockquote>
-            <p>
-              <span>1小时前</span>
+              <span>{{ item.created | momentDate }}</span>
               <a
                 href="javascript:;"
                 class="layui-btn layui-btn-small layui-btn-danger fly-delete"
