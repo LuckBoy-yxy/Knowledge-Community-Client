@@ -74,3 +74,8 @@ export const getCommentList = params => {
 export const getMsg = params => {
   return axios.get('/user/get-msg?' + qs.stringify(params))
 }
+
+// 删除某个或清空整个个人中心中, 我的消息页面的消息列表数据
+export const setMsg = params => {
+  return axios.get('/user/set-msg?' + qs.stringify(params))
+}

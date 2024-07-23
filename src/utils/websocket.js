@@ -59,6 +59,7 @@ class WebSocketClient {
   }
 
   onError () {
+    // console.log(this)
     setTimeout(() => {
       this.init()
     }, 1000)

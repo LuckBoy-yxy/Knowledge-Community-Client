@@ -1,7 +1,14 @@
 <template>
   <div class="fly-panel fly-panel-user" pad20>
-    <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
-      <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
+    <div
+      class="layui-tab layui-tab-brief"
+      lay-filter="user"
+      style="margin-top: 15px;"
+    >
+      <button
+        class="layui-btn layui-btn-danger"
+        @click="clearAll"
+      >清空全部消息</button>
       <div id="LAY_minemsg" style="margin-top: 10px;">
         <div
           v-if="!lists.length"
@@ -30,7 +37,7 @@
             <p>
               <span>{{ item.created | momentDate }}</span>
               <a
-                href="javascript:;"
+                @click="clear(item)"
                 class="layui-btn layui-btn-small layui-btn-danger fly-delete"
               >删除</a>
             </p>
@@ -51,9 +58,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import Pagination from '@/components/pagination'
 
-import { getMsg } from '@/api/user'
+import { getMsg, setMsg } from '@/api/user'
 
 export default {
   name: 'MessageCom',
@@ -70,6 +79,11 @@ export default {
   },
   mounted () {
     this.getMsgAll()
+  },
+  computed: {
+    ...mapState({
+      num: state => state.num.message ? state.num.message : 0
+    })
   },
   methods: {
     getMsgAll () {
@@ -88,6 +102,38 @@ export default {
         this.page = page
         this.getMsgAll()
       }
+    },
+    clear (item) {
+      // this.$store.commit('setMessage', {
+      //   // message: this.$store.state.num - 1
+      //   message: this.num - 1
+      // })
+      setMsg({
+        id: item._id
+      }).then(res => {
+        if (res.code === 200) {
+          this.$store.commit('setMessage', {
+            message: this.num - 1
+          })
+          this.getMsgAll()
+        }
+      })
+    },
+    clearAll () {
+      if (!this.lists.length) {
+        return this.$pop('暂无消息可以清空', 'shake')
+      }
+      this.$confirm('您确定要清空全部消息吗', () => {}, () => {
+        setMsg().then(res => {
+          if (res.code === 200) {
+            this.lists = []
+            this.$store.commit('setMessage', {
+              message: 0
+            })
+            this.total = 0
+          }
+        })
+      })
     }
   }
 }

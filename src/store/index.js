@@ -34,7 +34,8 @@ export default new Vuex.Store({
       state.ws.init()
     },
     setMessage (state, value) {
-      state.num = value.message ? value.message : 0
+      // state.num = value.message ? value.message : 0
+      state.num = value
     }
   },
   actions: {

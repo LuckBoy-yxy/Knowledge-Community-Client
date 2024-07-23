@@ -90,17 +90,18 @@
             </dl>
           </li>
 
+          <!-- v-if="num !== 0" -->
           <div
-            v-if="num !== 0"
+            v-if="num.message && num.message !== 0"
             class="fly-nav-msg"
-          >{{ num }}</div>
+          >{{ num.message }}</div>
           <Transition name="fade">
             <div
               class="layui-layer-tips"
               v-show="hasMsg"
             >
               <div class="layui-layer-content">
-                您有 {{ num }} 条未读消息
+                您有 {{ num.message }} 条未读消息
                 <i class="layui-layer-TipsG layui-layer-TipsB"></i>
               </div>
             </div>
@@ -156,7 +157,7 @@ export default {
   },
   watch: {
     num (newVal, oldVal) {
-      if (newVal !== oldVal) {
+      if (newVal.event && newVal !== oldVal) {
         this.hasMsg = true
         setTimeout(() => {
           this.hasMsg = false
