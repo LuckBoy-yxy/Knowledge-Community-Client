@@ -6,7 +6,8 @@ class WebSocketClient {
     const defaultConfig = {
       url: '127.0.0.1',
       port: 3012,
-      protocol: 'ws'
+      protocol: 'ws',
+      timeInterval: 1000
     }
     const finalConfig = {
       ...defaultConfig,
@@ -16,14 +17,16 @@ class WebSocketClient {
     this.port = finalConfig.port
     this.url = finalConfig.url
     this.protocol = finalConfig.protocol
+    this.timeID = null
+    this.timeInterval = finalConfig.timeInterval
   }
 
   init () {
     this.ws = new WebSocket(`${this.protocol}://${this.url}:${this.port}`)
-    this.ws.onopen = this.onOpen
-    this.ws.onmessage = this.onMessage
-    this.ws.onclose = this.onClose
-    this.ws.onerror = this.onError
+    this.ws.onopen = () => this.onOpen()
+    this.ws.onmessage = (msg) => this.onMessage(msg)
+    this.ws.onclose = () => this.onClose()
+    this.ws.onerror = () => this.onError()
   }
 
   onOpen () {
@@ -43,8 +46,8 @@ class WebSocketClient {
         // this.$router.push('/login')
         break
       case 'heartbeat':
-        // this.checkServer()
-        this.send(JSON.stringify({
+        this.checkServer()
+        this.ws.send(JSON.stringify({
           event: 'heartbeat',
           message: 'pong'
         }))
@@ -55,7 +58,7 @@ class WebSocketClient {
   }
 
   onClose () {
-    this.close()
+    this.ws.close()
   }
 
   onError () {
@@ -67,6 +70,17 @@ class WebSocketClient {
 
   send (msg) {
     this.ws.send(msg)
+  }
+
+  checkServer () {
+    if (this.timeID) {
+      clearTimeout(this.timeID)
+    }
+
+    this.timeID = setTimeout(() => {
+      this.onClose()
+      this.onError()
+    }, this.timeInterval + 1000)
   }
 }
 
