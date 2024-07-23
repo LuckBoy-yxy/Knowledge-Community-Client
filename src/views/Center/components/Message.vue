@@ -77,7 +77,6 @@ export default {
         page: this.page,
         pageSize: this.pageSize
       }).then(res => {
-        console.log(res)
         if (res.code === 200) {
           this.lists = res.data
           this.total = res.total

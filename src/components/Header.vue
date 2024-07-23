@@ -90,14 +90,17 @@
             </dl>
           </li>
 
-          <div class="fly-nav-msg">0</div>
+          <div
+            v-if="num !== 0"
+            class="fly-nav-msg"
+          >{{ num }}</div>
           <Transition name="fade">
             <div
               class="layui-layer-tips"
               v-show="hasMsg"
             >
               <div class="layui-layer-content">
-                您有一条未读消息
+                您有 {{ num }} 条未读消息
                 <i class="layui-layer-TipsG layui-layer-TipsB"></i>
               </div>
             </div>
@@ -109,6 +112,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 let timeId = null
 
@@ -126,7 +130,10 @@ export default {
   computed: {
     userInfo () {
       return this.$store.state.userInfo
-    }
+    },
+    ...mapState({
+      num: state => state.num
+    })
   },
   methods: {
     show () {
@@ -145,6 +152,16 @@ export default {
       this.$confirm('确定要退出吗?', () => {}, () => {
         this.$store.commit('logout')
       })
+    }
+  },
+  watch: {
+    num (newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.hasMsg = true
+        setTimeout(() => {
+          this.hasMsg = false
+        }, 2000)
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '@/router'
+import WebSocketClient from '@/utils/websocket'
 
 Vue.use(Vuex)
 
@@ -8,9 +9,9 @@ export default new Vuex.Store({
   state: {
     sid: '',
     userInfo: {},
-    isHide: false
-  },
-  getters: {
+    isHide: false,
+    ws: null,
+    num: 0
   },
   mutations: {
     setSid (state, sid) {
@@ -27,10 +28,18 @@ export default new Vuex.Store({
     },
     setHide (state, value) {
       state.isHide = value
+    },
+    initWebSocket (state, config) {
+      state.ws = new WebSocketClient(config)
+      state.ws.init()
+    },
+    setMessage (state, value) {
+      state.num = value.message ? value.message : 0
     }
   },
   actions: {
-  },
-  modules: {
+    message (ctx, msgObj) {
+      ctx.commit('setMessage', msgObj)
+    }
   }
 })

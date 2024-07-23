@@ -234,6 +234,9 @@ router.beforeEach((to, from, next) => {
   // }
   if (userInfo !== null && userInfo.token) {
     store.commit('setUserInfo', userInfo)
+    if (!store.state.ws) {
+      store.commit('initWebSocket', {})
+    }
   }
   if (to.matched.some(item => item.meta.requireAuth)) {
     const token = store.state.userInfo.token
