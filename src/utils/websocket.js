@@ -7,7 +7,7 @@ class WebSocketClient {
       url: '127.0.0.1',
       port: 3012,
       protocol: 'ws',
-      timeInterval: 1000
+      timeInterval: 30 * 1000
     }
     const finalConfig = {
       ...defaultConfig,
@@ -62,7 +62,6 @@ class WebSocketClient {
   }
 
   onError () {
-    // console.log(this)
     setTimeout(() => {
       this.init()
     }, 1000)
